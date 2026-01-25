@@ -1,4 +1,5 @@
 using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 /// <summary>
@@ -9,8 +10,7 @@ public class HealthComponent : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private int maxHealth = 100;
     [SerializeField] private int initialHealth = 100;
-
-    private int currentHealth;
+    [SerializeField] private int currentHealth;
 
     /// <summary>
     /// Fired when health changes. Parameters: (currentHealth, maxHealth)
@@ -91,4 +91,22 @@ public class HealthComponent : MonoBehaviour
     {
         return currentHealth > 0;
     }
+
+#if UNITY_EDITOR
+    [Button("Take Damage"), BoxGroup("Debug")]
+    private void DebugTakeDamage()
+    {
+        TakeDamage(10);
+        Debug.Log($"Took 10 damage. Current Health: {currentHealth}/{maxHealth}");
+    }
+#endif
+
+#if UNITY_EDITOR
+    [Button("Heal"), BoxGroup("Debug")]
+    private void DebugHeal()
+    {
+        Heal(10);
+        Debug.Log($"Healed 10 health. Current Health: {currentHealth}/{maxHealth}");
+    }
+#endif
 }

@@ -142,6 +142,7 @@ GameObject:
   - component: {fileID: 6437506023504243459}
   - component: {fileID: 5583483807435740413}
   - component: {fileID: -461703376959736553}
+  - component: {fileID: 743974934871732703}
   m_Layer: 0
   m_Name: Player Character Prefab
   m_TagString: Untagged
@@ -197,7 +198,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4291722035117816937}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 100
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -277,6 +278,7 @@ MonoBehaviour:
   aimController: {fileID: 4527346682214563505}
   interactionController: {fileID: 6437506023504243459}
   inventory: {fileID: -461703376959736553}
+  healthComponent: {fileID: 743974934871732703}
 --- !u!114 &4324103023094236716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -411,6 +413,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
   slotCount: 20
+--- !u!114 &743974934871732703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4291722035117816937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 353d647d651c32547a44341aff205bc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthComponent
+  maxHealth: 100
+  initialHealth: 100
 --- !u!1 &4359826508106861558
 GameObject:
   m_ObjectHideFlags: 0

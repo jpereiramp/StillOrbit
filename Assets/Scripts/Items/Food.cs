@@ -1,6 +1,6 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
-using Sirenix.OdinInspector;
 
 /// <summary>
 /// Behaviour for consumable food items when held.
@@ -38,8 +38,18 @@ public class Food : MonoBehaviour, IUsable
         // Get restoration value from data or local
         int healthToRestore = consumableData != null ? consumableData.HealthRestore : healthRestoration;
 
-        // TODO: Apply to actual health system when implemented
-        Debug.Log($"Consuming food: restoring {healthToRestore} health to {user.name}");
+        // Get HealthComponent from PlayerManager
+        HealthComponent healthComponent = PlayerManager.Instance.HealthComponent;
+
+        if (healthComponent != null)
+        {
+            healthComponent.Heal(healthToRestore);
+            Debug.Log($"[Food] Restored {healthToRestore} health to {user.name}");
+        }
+        else
+        {
+            Debug.LogWarning($"[Food] No HealthComponent found for {user.name}");
+        }
 
         onConsumed?.Invoke();
 
