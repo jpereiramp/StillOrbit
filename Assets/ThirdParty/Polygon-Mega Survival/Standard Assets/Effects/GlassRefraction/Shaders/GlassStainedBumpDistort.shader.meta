@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 963484209d11fd7f110076aa44295342
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 238860
+  packageName: POLY - Mega Survival
+  packageVersion: 2.1.0
+  assetPath: Assets/ThirdParty/Polygon-Mega Survival/Standard Assets/Effects/GlassRefraction/Shaders/GlassStainedBumpDistort.shader
+  uploadId: 0

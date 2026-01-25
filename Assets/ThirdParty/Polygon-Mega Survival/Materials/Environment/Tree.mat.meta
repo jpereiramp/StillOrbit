@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4a080f94b9a48864ab222a053cff4f58
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 238860
+  packageName: POLY - Mega Survival
+  packageVersion: 2.1.0
+  assetPath: Assets/ThirdParty/Polygon-Mega Survival/Materials/Environment/Tree.mat
+  uploadId: 0

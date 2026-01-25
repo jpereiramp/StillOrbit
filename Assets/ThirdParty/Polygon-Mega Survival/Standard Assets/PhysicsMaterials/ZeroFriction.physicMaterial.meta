@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c2815a7ab32e42c4bb42f59caacb8ec1
+timeCreated: 1427463081
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 238860
+  packageName: POLY - Mega Survival
+  packageVersion: 2.1.0
+  assetPath: Assets/ThirdParty/Polygon-Mega Survival/Standard Assets/PhysicsMaterials/ZeroFriction.physicMaterial
+  uploadId: 0

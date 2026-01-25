@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 054a31a99d11e49d110086ba44295342
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 238860
+  packageName: POLY - Mega Survival
+  packageVersion: 2.1.0
+  assetPath: Assets/ThirdParty/Polygon-Mega Survival/Standard Assets/Effects/ToonShading/Shaders/ToonLitOutline.shader
+  uploadId: 0

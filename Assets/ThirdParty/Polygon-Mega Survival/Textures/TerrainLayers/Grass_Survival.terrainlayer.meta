@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f2c4c2e10b1dfbb4aba6106eb0c7230c
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 8574412962073106934
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 238860
+  packageName: POLY - Mega Survival
+  packageVersion: 2.1.0
+  assetPath: Assets/ThirdParty/Polygon-Mega Survival/Textures/TerrainLayers/Grass_Survival.terrainlayer
+  uploadId: 0

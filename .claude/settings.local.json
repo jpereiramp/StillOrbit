@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.stompyrobot.uk)",
+      "Bash(wc:*)",
+      "Bash(del \"c:\\\\Users\\\\joao\\\\Projects\\\\StillOrbit\\\\Assets\\\\Scripts\\\\Player\\\\PlayerLocomotionController.cs\")",
+      "Bash(del \"c:\\\\Users\\\\joao\\\\Projects\\\\StillOrbit\\\\Assets\\\\Scripts\\\\Player\\\\MovementState.cs\")",
+      "Bash(powershell -Command \"Remove-Item ''c:\\\\Users\\\\joao\\\\Projects\\\\StillOrbit\\\\Assets\\\\Scripts\\\\Player\\\\PlayerLocomotionController.cs'' -Force; Write-Host ''Deleted old PlayerLocomotionController.cs''\")",
+      "Bash(powershell -Command \"Remove-Item ''c:\\\\Users\\\\joao\\\\Projects\\\\StillOrbit\\\\Assets\\\\Scripts\\\\Player\\\\MovementState.cs'' -Force; Write-Host ''Deleted old MovementState.cs''\")"
+    ]
+  }
+}

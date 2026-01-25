@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 406a976191e8366459222b654c60e1f8
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 238860
+  packageName: POLY - Mega Survival
+  packageVersion: 2.1.0
+  assetPath: Assets/ThirdParty/Polygon-Mega Survival/Standard Assets/Prototyping/Shaders/WorldCoordDiffuse.shader
+  uploadId: 0

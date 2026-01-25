@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 8aaff0751054e4a9cb4642d01eaf5be9
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 238860
+  packageName: POLY - Mega Survival
+  packageVersion: 2.1.0
+  assetPath: Assets/ThirdParty/Polygon-Mega Survival/Standard Assets/Environment/Water/Water4/Shaders/FXWater4Simple.shader
+  uploadId: 0

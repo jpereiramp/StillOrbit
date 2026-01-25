@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 225c5fbe294d1b5438586a32e5fa8b0a
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 238860
+  packageName: POLY - Mega Survival
+  packageVersion: 2.1.0
+  assetPath: Assets/ThirdParty/Polygon-Mega Survival/Materials/Reflect.mat
+  uploadId: 0

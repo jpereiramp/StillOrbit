@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 663c50cf02def2f4cbbfaddff44dd7a7
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 15600000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 238860
+  packageName: POLY - Mega Survival
+  packageVersion: 2.1.0
+  assetPath: Assets/ThirdParty/Polygon-Mega Survival/Terrain/Terrain_Demo.asset
+  uploadId: 0

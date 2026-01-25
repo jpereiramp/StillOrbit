@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0dcbefa842623594eaa0247b6b3700ea
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 8574412962073106934
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 238860
+  packageName: POLY - Mega Survival
+  packageVersion: 2.1.0
+  assetPath: Assets/ThirdParty/Polygon-Mega Survival/Textures/TerrainLayers/Dirt_Survival.terrainlayer
+  uploadId: 0

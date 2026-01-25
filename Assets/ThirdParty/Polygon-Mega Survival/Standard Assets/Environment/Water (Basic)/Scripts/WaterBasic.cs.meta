@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 0d2f50a8e0bb841a5aaa90ae55db8849
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 238860
+  packageName: POLY - Mega Survival
+  packageVersion: 2.1.0
+  assetPath: Assets/ThirdParty/Polygon-Mega Survival/Standard Assets/Environment/Water
+    (Basic)/Scripts/WaterBasic.cs
+  uploadId: 0

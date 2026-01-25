@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 939e727662b0a5a4db486ca847ce6434
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 238860
+  packageName: POLY - Mega Survival
+  packageVersion: 2.1.0
+  assetPath: Assets/ThirdParty/Polygon-Mega Survival/Materials/MainMaterial.mat
+  uploadId: 0

@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 01a668cc78047034a8a0c5ca2d24c6f7
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 238860
+  packageName: POLY - Mega Survival
+  packageVersion: 2.1.0
+  assetPath: Assets/ThirdParty/Polygon-Mega Survival/Standard Assets/Effects/Projectors/Shaders/ProjectorMultiply.shader
+  uploadId: 0

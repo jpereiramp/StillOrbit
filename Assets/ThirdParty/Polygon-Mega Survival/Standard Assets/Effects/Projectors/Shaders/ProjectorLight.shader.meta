@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: c0ace1ca4bc0718448acf798c93d52d9
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 238860
+  packageName: POLY - Mega Survival
+  packageVersion: 2.1.0
+  assetPath: Assets/ThirdParty/Polygon-Mega Survival/Standard Assets/Effects/Projectors/Shaders/ProjectorLight.shader
+  uploadId: 0
