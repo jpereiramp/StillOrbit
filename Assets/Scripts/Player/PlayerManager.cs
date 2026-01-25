@@ -7,6 +7,8 @@ using UnityEngine;
 /// </summary>
 public class PlayerManager : MonoBehaviour
 {
+    public static PlayerManager Instance { get; private set; }
+
     [Header("References")]
     [SerializeField] private PlayerLocomotionController locomotionController;
     [SerializeField] private PlayerCameraController cameraController;
@@ -15,6 +17,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private PlayerAimController aimController;
     [SerializeField] private PlayerInteractionController interactionController;
     [SerializeField] private PlayerInventory inventory;
+    [SerializeField] private HealthComponent healthComponent;
 
     public PlayerLocomotionController LocomotionController => locomotionController;
     public PlayerCameraController CameraController => cameraController;
@@ -23,10 +26,21 @@ public class PlayerManager : MonoBehaviour
     public PlayerAimController AimController => aimController;
     public PlayerInteractionController InteractionController => interactionController;
     public PlayerInventory Inventory => inventory;
+    public HealthComponent HealthComponent => healthComponent;
 
     // Edge detection for button inputs
     private bool _previousJumpInput;
     private bool _previousCrouchInput;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
 
     private void Start()
     {

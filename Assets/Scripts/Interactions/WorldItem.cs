@@ -1,5 +1,5 @@
-using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 /// <summary>
 /// Component for items that exist in the world and can be picked up.
@@ -97,7 +97,7 @@ public class WorldItem : MonoBehaviour, IPickable
         return null;
     }
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     private void OnValidate()
     {
         if (itemData != null && itemData.IsStackable)
@@ -109,5 +109,5 @@ public class WorldItem : MonoBehaviour, IPickable
             quantity = 1;
         }
     }
-    #endif
+#endif
 }

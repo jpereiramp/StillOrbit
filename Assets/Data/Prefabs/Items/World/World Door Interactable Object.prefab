@@ -172,7 +172,7 @@ MonoBehaviour:
   openPrompt: Open Door
   closePrompt: Close Door
   doorPivot: {fileID: 6999344883936021888}
-  openAngle: 90
+  openAngle: -90
   rotationSpeed: 5
   onDoorOpened:
     m_PersistentCalls:
