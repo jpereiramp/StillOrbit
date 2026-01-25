@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &206836141835226431
+--- !u!1 &2501263052241360580
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,46 +8,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8990149315381049214}
-  - component: {fileID: 5839913532670329217}
-  - component: {fileID: 6197595916662156511}
-  m_Layer: 10
-  m_Name: Door
+  - component: {fileID: 7915799258901656168}
+  - component: {fileID: 7795472740276170640}
+  - component: {fileID: 940928042976545706}
+  m_Layer: 0
+  m_Name: Katana
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8990149315381049214
+--- !u!4 &7915799258901656168
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 206836141835226431}
+  m_GameObject: {fileID: 2501263052241360580}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.49, y: 2.17, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6999344883936021888}
+  m_Father: {fileID: 5402869068206445419}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &5839913532670329217
+--- !u!33 &7795472740276170640
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 206836141835226431}
-  m_Mesh: {fileID: 5901279141008375873, guid: d9eb66e23b199c54d8cb5a10cbb3708d, type: 3}
---- !u!23 &6197595916662156511
+  m_GameObject: {fileID: 2501263052241360580}
+  m_Mesh: {fileID: 7991704601645392608, guid: ecebd57690d2e2e40b61c32f7d153822, type: 3}
+--- !u!23 &940928042976545706
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 206836141835226431}
+  m_GameObject: {fileID: 2501263052241360580}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 09826f0bd8ede6049871312167159afd, type: 2}
+  - {fileID: 2100000, guid: 939e727662b0a5a4db486ca847ce6434, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -78,7 +78,7 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
+  m_StitchLightmapSeams: 1
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -89,7 +89,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &3871298301577654356
+--- !u!1 &6031359113267899755
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,96 +97,77 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6999344883936021888}
-  m_Layer: 10
-  m_Name: Pivot
+  - component: {fileID: 5402869068206445419}
+  - component: {fileID: 1134211426778519811}
+  - component: {fileID: 5357090928552187768}
+  - component: {fileID: 2562808975852517278}
+  - component: {fileID: -7047132294529386429}
+  m_Layer: 0
+  m_Name: Held Sword Weapon Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6999344883936021888
+--- !u!4 &5402869068206445419
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3871298301577654356}
+  m_GameObject: {fileID: 6031359113267899755}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.43, y: -2.13, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8990149315381049214}
-  m_Father: {fileID: 4395089504332587265}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &4147733002472135551
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4395089504332587265}
-  - component: {fileID: 8189994650417497620}
-  - component: {fileID: 7229841293997191128}
-  - component: {fileID: 5032255539589486266}
-  m_Layer: 10
-  m_Name: World Door Interactable Object
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4395089504332587265
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4147733002472135551}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.99, y: 3.61, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6999344883936021888}
+  - {fileID: 7915799258901656168}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8189994650417497620
+--- !u!114 &1134211426778519811
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4147733002472135551}
+  m_GameObject: {fileID: 6031359113267899755}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 816c59a2b4ce4244ebd19e72bdb0dab8, type: 3}
+  m_Script: {fileID: 11500000, guid: d19c376883385734aa23fd2d34ab0582, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SimpleDoor
-  isOpen: 0
-  openPrompt: Open Door
-  closePrompt: Close Door
-  doorPivot: {fileID: 6999344883936021888}
-  openAngle: -90
-  rotationSpeed: 5
-  onDoorOpened:
+  m_EditorClassIdentifier: Assembly-CSharp::Item
+  itemData: {fileID: 11400000, guid: 6367ec136f8da954f82944b0a0fe291a, type: 2}
+--- !u!114 &5357090928552187768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6031359113267899755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c81b4c06b7c38a6468c38cb792318ebc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MeleeWeapon
+  itemData: {fileID: 11400000, guid: 6367ec136f8da954f82944b0a0fe291a, type: 2}
+  weaponHitbox: {fileID: -7047132294529386429}
+  fallbackDamage: 10
+  fallbackAttackRate: 1
+  fallbackRange: 2
+  onAttack:
     m_PersistentCalls:
       m_Calls: []
-  onDoorClosed:
+  onHit:
     m_PersistentCalls:
       m_Calls: []
---- !u!65 &7229841293997191128
+--- !u!65 &2562808975852517278
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4147733002472135551}
+  m_GameObject: {fileID: 6031359113267899755}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -195,36 +176,24 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &5032255539589486266
-Rigidbody:
+  m_Size: {x: 1.214014, y: 0.10707714, z: 0.104971185}
+  m_Center: {x: 0.3266878, y: -0.0007418655, z: 0.0074206386}
+--- !u!114 &-7047132294529386429
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4147733002472135551}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
+  m_GameObject: {fileID: 6031359113267899755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bb28eeb9cc9658468ccbd7f1e2210aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponHitbox
+  hitLayers:
     serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 80
-  m_CollisionDetection: 0
+    m_Bits: 34039

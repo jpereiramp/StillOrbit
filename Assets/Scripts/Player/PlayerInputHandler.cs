@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,6 +15,7 @@ public class PlayerInputHandler : MonoBehaviour
     public bool PrimaryActionInput = false;
     public bool SecondaryActionInput = false;
     public bool InteractInput = false;
+    public bool DropInput = false;
     #endregion
 
     #region Lifecycle
@@ -40,6 +42,8 @@ public class PlayerInputHandler : MonoBehaviour
         controls.Player.SecondaryAction.canceled += OnSecondaryAction;
         controls.Player.Interact.performed += OnInteract;
         controls.Player.Interact.canceled += OnInteract;
+        controls.Player.Drop.performed += OnDrop;
+        controls.Player.Drop.canceled += OnDrop;
 
         controls.Enable();
     }
@@ -62,6 +66,8 @@ public class PlayerInputHandler : MonoBehaviour
         controls.Player.SecondaryAction.canceled -= OnSecondaryAction;
         controls.Player.Interact.performed -= OnInteract;
         controls.Player.Interact.canceled -= OnInteract;
+        controls.Player.Drop.performed -= OnDrop;
+        controls.Player.Drop.canceled -= OnDrop;
 
         controls.Disable();
     }
@@ -106,6 +112,11 @@ public class PlayerInputHandler : MonoBehaviour
     public void OnInteract(InputAction.CallbackContext context)
     {
         InteractInput = context.ReadValueAsButton();
+    }
+
+    public void OnDrop(InputAction.CallbackContext context)
+    {
+        DropInput = context.ReadValueAsButton();
     }
     #endregion
 }

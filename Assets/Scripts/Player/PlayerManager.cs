@@ -9,7 +9,7 @@ public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
 
-    [Header("References")]
+    [Header("Controller References")]
     [SerializeField] private PlayerLocomotionController locomotionController;
     [SerializeField] private PlayerCameraController cameraController;
     [SerializeField] private PlayerInputHandler inputHandler;
@@ -18,6 +18,10 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private PlayerInteractionController interactionController;
     [SerializeField] private PlayerInventory inventory;
     [SerializeField] private HealthComponent healthComponent;
+    [SerializeField] private PlayerCombatManager combatManager;
+
+    [Header("Component References")]
+    [SerializeField] private Animator animator;
 
     public PlayerLocomotionController LocomotionController => locomotionController;
     public PlayerCameraController CameraController => cameraController;
@@ -27,6 +31,8 @@ public class PlayerManager : MonoBehaviour
     public PlayerInteractionController InteractionController => interactionController;
     public PlayerInventory Inventory => inventory;
     public HealthComponent HealthComponent => healthComponent;
+    public PlayerCombatManager CombatManager => combatManager;
+    public Animator Animator => animator;
 
     // Edge detection for button inputs
     private bool _previousJumpInput;

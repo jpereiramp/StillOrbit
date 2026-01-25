@@ -4,13 +4,18 @@ using UnityEngine;
 
 /// <summary>
 /// Manages health for any entity. Provides events for UI and game systems to react to health changes.
+/// Implements IDamageable for combat system integration.
 /// </summary>
-public class HealthComponent : MonoBehaviour
+public class HealthComponent : MonoBehaviour, IDamageable
 {
     [Header("Settings")]
     [SerializeField] private int maxHealth = 100;
     [SerializeField] private int initialHealth = 100;
     [SerializeField] private int currentHealth;
+
+    [Header("Damage Type")]
+    [Tooltip("What type of damage this entity receives (determines weapon effectiveness)")]
+    [SerializeField] private DamageType damageType = DamageType.Flesh;
 
     /// <summary>
     /// Fired when health changes. Parameters: (currentHealth, maxHealth)
@@ -24,6 +29,11 @@ public class HealthComponent : MonoBehaviour
 
     public int CurrentHealth => currentHealth;
     public int MaxHealth => maxHealth;
+
+    /// <summary>
+    /// The type of damage this entity receives (IDamageable implementation).
+    /// </summary>
+    public DamageType DamageType => damageType;
 
     private void Awake()
     {
@@ -48,6 +58,16 @@ public class HealthComponent : MonoBehaviour
         {
             OnDeath?.Invoke();
         }
+    }
+
+    /// <summary>
+    /// IDamageable implementation. Converts float damage to int and applies it.
+    /// </summary>
+    public void TakeDamage(float amount, DamageType incomingDamageType, GameObject source)
+    {
+        int intDamage = Mathf.RoundToInt(amount);
+        Debug.Log($"[Health] {gameObject.name} taking {intDamage} damage (type: {incomingDamageType}) from {source?.name ?? "unknown"}");
+        TakeDamage(intDamage);
     }
 
     public void Heal(int amount)

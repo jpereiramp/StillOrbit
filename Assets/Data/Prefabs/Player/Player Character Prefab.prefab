@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 285466761866346161}
   - component: {fileID: 3018578466249412350}
   - component: {fileID: 6405880236368068163}
+  - component: {fileID: 6911434538172840560}
   - component: {fileID: 414380330849343048}
   - component: {fileID: 7350867502634692673}
   - component: {fileID: 4324103023094236716}
@@ -142,6 +143,7 @@ GameObject:
   - component: {fileID: 6437506023504243459}
   - component: {fileID: 5583483807435740413}
   - component: {fileID: -461703376959736553}
+  - component: {fileID: 3965061983001386789}
   - component: {fileID: 743974934871732703}
   m_Layer: 0
   m_Name: Player Character Prefab
@@ -217,6 +219,28 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 1
+--- !u!95 &6911434538172840560
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4291722035117816937}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ab4a94374227236499e9f1bfdbee28ff, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &414380330849343048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,6 +303,8 @@ MonoBehaviour:
   interactionController: {fileID: 6437506023504243459}
   inventory: {fileID: -461703376959736553}
   healthComponent: {fileID: 743974934871732703}
+  combatManager: {fileID: 3965061983001386789}
+  animator: {fileID: 6911434538172840560}
 --- !u!114 &4324103023094236716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -299,6 +325,7 @@ MonoBehaviour:
   PrimaryActionInput: 0
   SecondaryActionInput: 0
   InteractInput: 0
+  DropInput: 0
 --- !u!114 &8240974224381093844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,6 +440,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
   slotCount: 20
+--- !u!114 &3965061983001386789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4291722035117816937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2df8bbb5ca5ad441a2cd1405187bc88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCombatManager
+  playerManager: {fileID: 0}
+  meleeAttackTrigger: MeleeAttack
 --- !u!114 &743974934871732703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -427,6 +468,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HealthComponent
   maxHealth: 100
   initialHealth: 100
+  currentHealth: 0
+  damageType: 3
 --- !u!1 &4359826508106861558
 GameObject:
   m_ObjectHideFlags: 0

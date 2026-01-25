@@ -1,5 +1,6 @@
-using UnityEngine;
+using System.Security.Cryptography;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 /// <summary>
 /// Manages the currently equipped/held item in the player's hands.
@@ -167,6 +168,29 @@ public class PlayerEquipmentController : MonoBehaviour
         }
 
         return result;
+    }
+
+    public void DropItem()
+    {
+        if (!HasEquippedItem)
+            return;
+
+        // Detach item
+        var item = UnequipItem(destroy: false);
+
+        // Apply drop physics
+        var rb = item.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+            rb.transform.SetParent(null);
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+
+            // Apply forward and upward force
+            Vector3 dropForce = transform.forward * 2f + Vector3.up * 1f;
+            rb.AddForce(dropForce, ForceMode.VelocityChange);
+        }
     }
 
     private void SetupHeldItem(GameObject item)
