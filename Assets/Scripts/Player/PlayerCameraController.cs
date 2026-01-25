@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class PlayerCameraController : MonoBehaviour
@@ -23,6 +24,8 @@ public class PlayerCameraController : MonoBehaviour
     [SerializeField]
     [Range(0, 90f)]
     private float verticalRotationMaxLimit = 45f;
+    [SerializeField]
+    private bool autoFindCamera = false;
 
     private PlayerInputHandler playerInputHandler;
 
@@ -37,6 +40,13 @@ public class PlayerCameraController : MonoBehaviour
         : Quaternion.identity;
 
     /// <summary>
+    /// Gets the transform of the main camera.
+    /// </summary>
+    public Transform CameraTransform => mainCamera != null
+        ? mainCamera.transform
+        : null;
+
+    /// <summary>
     /// Sets the transform that the camera should follow.
     /// </summary>
     public void SetFollowTarget(Transform target)
@@ -47,7 +57,11 @@ public class PlayerCameraController : MonoBehaviour
     private void Awake()
     {
         playerInputHandler = GetComponent<PlayerInputHandler>();
-        mainCamera = AttemptToFindMainCamera();
+
+        if (autoFindCamera)
+        {
+            mainCamera = AttemptToFindMainCamera();
+        }
     }
 
     private void Start()
@@ -86,13 +100,7 @@ public class PlayerCameraController : MonoBehaviour
 
     private Camera AttemptToFindMainCamera()
     {
-        Camera mainCamera = Camera.main;
-        if (mainCamera != null)
-        {
-            return mainCamera;
-        }
-
-        Camera foundCamera = FindAnyObjectByType<Camera>();
+        Camera foundCamera = Camera.main;
         if (foundCamera != null)
         {
             return foundCamera;

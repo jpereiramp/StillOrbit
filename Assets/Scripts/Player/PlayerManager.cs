@@ -3,6 +3,7 @@ using UnityEngine;
 /// <summary>
 /// Coordinates input, camera, and locomotion systems for the player.
 /// Acts as a bridge between PlayerInputHandler, PlayerCameraController, and PlayerLocomotionController.
+/// Also provides centralized access to all player subsystems.
 /// </summary>
 public class PlayerManager : MonoBehaviour
 {
@@ -10,6 +11,18 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private PlayerLocomotionController locomotionController;
     [SerializeField] private PlayerCameraController cameraController;
     [SerializeField] private PlayerInputHandler inputHandler;
+    [SerializeField] private PlayerEquipmentController equipmentController;
+    [SerializeField] private PlayerAimController aimController;
+    [SerializeField] private PlayerInteractionController interactionController;
+    [SerializeField] private PlayerInventory inventory;
+
+    public PlayerLocomotionController LocomotionController => locomotionController;
+    public PlayerCameraController CameraController => cameraController;
+    public PlayerInputHandler InputHandler => inputHandler;
+    public PlayerEquipmentController EquipmentController => equipmentController;
+    public PlayerAimController AimController => aimController;
+    public PlayerInteractionController InteractionController => interactionController;
+    public PlayerInventory Inventory => inventory;
 
     // Edge detection for button inputs
     private bool _previousJumpInput;

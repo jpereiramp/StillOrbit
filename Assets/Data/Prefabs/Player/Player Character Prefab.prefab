@@ -63,6 +63,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6854677833654283251}
+  - {fileID: 1078615359468114011}
   m_Father: {fileID: 7392240281951479410}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4906530820480302356
@@ -133,10 +134,14 @@ GameObject:
   - component: {fileID: 3018578466249412350}
   - component: {fileID: 6405880236368068163}
   - component: {fileID: 414380330849343048}
+  - component: {fileID: 7350867502634692673}
   - component: {fileID: 4324103023094236716}
   - component: {fileID: 8240974224381093844}
   - component: {fileID: 6594995919710383239}
-  - component: {fileID: 7350867502634692673}
+  - component: {fileID: 4527346682214563505}
+  - component: {fileID: 6437506023504243459}
+  - component: {fileID: 5583483807435740413}
+  - component: {fileID: -461703376959736553}
   m_Layer: 0
   m_Name: Player Character Prefab
   m_TagString: Untagged
@@ -253,6 +258,25 @@ MonoBehaviour:
   CheckMovementInitialOverlaps: 1
   KillVelocityWhenExceedMaxMovementIterations: 1
   KillRemainingMovementWhenExceedMaxMovementIterations: 1
+--- !u!114 &7350867502634692673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4291722035117816937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7a38f8d57273314b8918df9f5027821, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
+  locomotionController: {fileID: 6594995919710383239}
+  cameraController: {fileID: 8240974224381093844}
+  inputHandler: {fileID: 4324103023094236716}
+  equipmentController: {fileID: 5583483807435740413}
+  aimController: {fileID: 4527346682214563505}
+  interactionController: {fileID: 6437506023504243459}
+  inventory: {fileID: -461703376959736553}
 --- !u!114 &4324103023094236716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,6 +296,7 @@ MonoBehaviour:
   CrouchInput: 0
   PrimaryActionInput: 0
   SecondaryActionInput: 0
+  InteractInput: 0
 --- !u!114 &8240974224381093844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,6 +316,7 @@ MonoBehaviour:
   mouseSensitivity: 10
   verticalRotationMinLimit: -45
   verticalRotationMaxLimit: 45
+  autoFindCamera: 0
 --- !u!114 &6594995919710383239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,7 +349,7 @@ MonoBehaviour:
   MeshRoot: {fileID: 7392240281951479410}
   CameraFollowPoint: {fileID: 6439154745754229257}
   CrouchedCapsuleHeight: 1
---- !u!114 &7350867502634692673
+--- !u!114 &4527346682214563505
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -332,12 +358,59 @@ MonoBehaviour:
   m_GameObject: {fileID: 4291722035117816937}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7a38f8d57273314b8918df9f5027821, type: 3}
+  m_Script: {fileID: 11500000, guid: b70876990a586f84a87f86f806add534, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
-  locomotionController: {fileID: 6594995919710383239}
-  cameraController: {fileID: 8240974224381093844}
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAimController
+  playerCameraController: {fileID: 8240974224381093844}
+  maxAimDistance: 100
+  aimLayerMask:
+    serializedVersion: 2
+    m_Bits: 1216
+--- !u!114 &6437506023504243459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4291722035117816937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4b2886981f066a4f89e529b977b908e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractionController
   inputHandler: {fileID: 4324103023094236716}
+  aimController: {fileID: 4527346682214563505}
+  equipmentController: {fileID: 5583483807435740413}
+  inventory: {fileID: -461703376959736553}
+  interactionRange: 3
+--- !u!114 &5583483807435740413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4291722035117816937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 493c5c33cc3fe824189fa4b72a49d5ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerEquipmentController
+  itemHoldPoint: {fileID: 1078615359468114011}
+  defaultHoldOffset: {x: 0, y: 0, z: 0}
+  defaultHoldRotation: {x: 0, y: 0, z: 0}
+--- !u!114 &-461703376959736553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4291722035117816937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f67b38edbf76023489c6ecdeaf48f2d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
+  slotCount: 20
 --- !u!1 &4359826508106861558
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,6 +474,37 @@ Transform:
   - {fileID: 7392240281951479410}
   m_Father: {fileID: 285466761866346161}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6371771631140729913
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1078615359468114011}
+  m_Layer: 0
+  m_Name: Item Hold Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1078615359468114011
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6371771631140729913}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0.4, y: -0.15, z: 0.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 449697601664466325}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &7264269286687464637
 GameObject:
   m_ObjectHideFlags: 0

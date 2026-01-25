@@ -13,6 +13,7 @@ public class PlayerInputHandler : MonoBehaviour
     public bool CrouchInput = false;
     public bool PrimaryActionInput = false;
     public bool SecondaryActionInput = false;
+    public bool InteractInput = false;
     #endregion
 
     #region Lifecycle
@@ -37,6 +38,8 @@ public class PlayerInputHandler : MonoBehaviour
         controls.Player.PrimaryAction.canceled += OnPrimaryAction;
         controls.Player.SecondaryAction.performed += OnSecondaryAction;
         controls.Player.SecondaryAction.canceled += OnSecondaryAction;
+        controls.Player.Interact.performed += OnInteract;
+        controls.Player.Interact.canceled += OnInteract;
 
         controls.Enable();
     }
@@ -57,6 +60,8 @@ public class PlayerInputHandler : MonoBehaviour
         controls.Player.PrimaryAction.canceled -= OnPrimaryAction;
         controls.Player.SecondaryAction.performed -= OnSecondaryAction;
         controls.Player.SecondaryAction.canceled -= OnSecondaryAction;
+        controls.Player.Interact.performed -= OnInteract;
+        controls.Player.Interact.canceled -= OnInteract;
 
         controls.Disable();
     }
@@ -96,6 +101,11 @@ public class PlayerInputHandler : MonoBehaviour
     public void OnSecondaryAction(InputAction.CallbackContext context)
     {
         SecondaryActionInput = context.ReadValueAsButton();
+    }
+
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        InteractInput = context.ReadValueAsButton();
     }
     #endregion
 }
