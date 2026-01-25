@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 8ec925bf706f93349be8a406ae313bba
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 4890085278179872738
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 335280
+  packageName: Low Poly Sci-Fi Planet Base - Space Station
+  packageVersion: 1.0
+  assetPath: Assets/JC_LP_SciFiPlanet/Scenes/LP_SciFiPlanet_Overview_LightingSettings.lighting
+  uploadId: 793318

@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: f806e8502e086bd4485d0c63c1978e38
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 625f186215c104763be7675aa2d941aa, type: 3}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 335280
+  packageName: Low Poly Sci-Fi Planet Base - Space Station
+  packageVersion: 1.0
+  assetPath: Assets/JC_LP_SciFiPlanet/Shaders/LP_SciFiPlanet_Grass.shadergraph
+  uploadId: 793318
