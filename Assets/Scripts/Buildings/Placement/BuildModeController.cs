@@ -15,6 +15,9 @@ public class BuildModeController : MonoBehaviour
     [Required]
     [SerializeField] private BuildingsDatabase buildingsDatabase;
 
+    [BoxGroup("References")]
+    [SerializeField] private BuildingGhostController ghostController;
+
 
     [BoxGroup("References")]
     [Required]
@@ -96,12 +99,22 @@ public class BuildModeController : MonoBehaviour
     {
         SetBuildModeState(BuildModeState.MenuOpen);
         SetSelectedBuilding(null);
+
+        if (ghostController != null)
+        {
+            ghostController.ClearGhost();
+        }
     }
 
     private void ExitBuildMode()
     {
         SetBuildModeState(BuildModeState.Inactive);
         SetSelectedBuilding(null);
+
+        if (ghostController != null)
+        {
+            ghostController.ClearGhost();
+        }
     }
 
     public void SetSelectedBuilding(BuildingData buildingData)
@@ -109,8 +122,14 @@ public class BuildModeController : MonoBehaviour
         if (selectedBuilding != buildingData)
         {
             selectedBuilding = buildingData;
-            SetBuildModeState(BuildModeState.Placing);
             OnSelectedBuildingChanged?.Invoke(selectedBuilding);
+
+            if (ghostController != null)
+            {
+                ghostController.ShowGhost(selectedBuilding);
+            }
+
+            SetBuildModeState(BuildModeState.Placing);
         }
     }
 
