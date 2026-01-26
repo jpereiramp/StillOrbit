@@ -5,6 +5,7 @@ public enum DebugPanelTab
 {
     PlayerStatus,
     BuildingStatus,
+    CompanionStatus,
 }
 
 public class DebugPanel : MonoBehaviour
@@ -15,8 +16,13 @@ public class DebugPanel : MonoBehaviour
     [SerializeField]
     private BuildModeController buildModeController;
 
+    [Header("Companion")]
+    [SerializeField]
+    private CompanionCoreController companionController;
+
     private int tabCount = DebugPanelTab.GetNames(typeof(DebugPanelTab)).Length;
     private int currentTab = 0;
+    private Vector2 companionInventoryScrollPos;
 
     private void Update()
     {
@@ -37,6 +43,9 @@ public class DebugPanel : MonoBehaviour
                 break;
             case DebugPanelTab.BuildingStatus:
                 RenderBuildingStatusTab();
+                break;
+            case DebugPanelTab.CompanionStatus:
+                RenderCompanionStatusTab();
                 break;
         }
 
@@ -109,5 +118,69 @@ public class DebugPanel : MonoBehaviour
 
         GUILayout.Label("Selected Building: " + buildModeController.SelectedBuilding?.BuildingName ?? "None");
         GUILayout.Label("Build Mode State: " + buildModeController.CurrentState.ToString());
+    }
+
+    private void RenderCompanionStatusTab()
+    {
+        if (companionController == null)
+        {
+            GUILayout.Label("(No companion reference)");
+            return;
+        }
+
+        // State info
+        GUILayout.Label($"State: {companionController.CurrentState}");
+        GUILayout.Label($"Active: {(companionController.IsActive ? "Yes" : "No")}");
+
+        float dist = companionController.GetDistanceToPlayer();
+        GUILayout.Label($"Distance: {(dist < float.MaxValue ? $"{dist:F1}m" : "N/A")}");
+
+        bool inRange = companionController.IsWithinInteractionRange();
+        GUILayout.Label($"In Range: {(inRange ? "Yes" : "No")}");
+
+        GUILayout.Space(5);
+
+        // Inventory info 
+        CompanionInventory companionInventory = companionController.Inventory;
+        if (companionInventory != null)
+        {
+            int total = companionInventory.GetTotalResourceCount();
+            GUILayout.Label($"Inventory: {total} total");
+
+            if (total > 0)
+            {
+                companionInventoryScrollPos = GUILayout.BeginScrollView(companionInventoryScrollPos, GUILayout.Height(60));
+                foreach (var kvp in companionInventory.GetAllResources())
+                {
+                    GUILayout.Label($"  {kvp.Key}: {kvp.Value}");
+                }
+                GUILayout.EndScrollView();
+            }
+        }
+
+        GUILayout.Space(5);
+
+        // Auto-deposit info
+        CompanionAutoDeposit companionAutoDeposit = companionController.AutoDepositController;
+        if (companionAutoDeposit != null)
+        {
+            var idleTimerField = typeof(CompanionAutoDeposit).GetField("idleTimer",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var triggeredField = typeof(CompanionAutoDeposit).GetField("isAutoDepositTriggered",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+            float idleTimer = idleTimerField != null ? (float)idleTimerField.GetValue(companionAutoDeposit) : 0f;
+            bool isTriggered = triggeredField != null && (bool)triggeredField.GetValue(companionAutoDeposit);
+
+            float threshold = companionController.Data?.IdleTimeBeforeAutoDeposit ?? 5f;
+            GUILayout.Label($"Auto-Deposit: {(isTriggered ? "Active" : "Idle")}");
+            GUILayout.Label($"Timer: {idleTimer:F1}s / {threshold:F1}s");
+        }
+
+        GUILayout.Space(5);
+
+        // Depot info
+        var depots = BuildingRegistry.Instance?.GetAll<IResourceStorage>();
+        GUILayout.Label($"Depots Found: {depots?.Count ?? 0}");
     }
 }

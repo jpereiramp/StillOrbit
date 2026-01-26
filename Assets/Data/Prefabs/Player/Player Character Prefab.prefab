@@ -328,6 +328,11 @@ MonoBehaviour:
   SecondaryActionInput: 0
   InteractInput: 0
   DropInput: 0
+  ToggleBuildModePressed: 0
+  RotateBuildingPressed: 0
+  ConfirmBuildPressed: 0
+  CancelBuildPressed: 0
+  CallCompanionPressed: 0
 --- !u!114 &8240974224381093844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -396,7 +401,7 @@ MonoBehaviour:
   maxAimDistance: 100
   aimLayerMask:
     serializedVersion: 2
-    m_Bits: 1217
+    m_Bits: 1049793
 --- !u!114 &6437506023504243459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -486,6 +491,7 @@ MonoBehaviour:
   maxHealth: 100
   initialHealth: 100
   currentHealth: 0
+  isInvulnerable: 0
   damageType: 3
 --- !u!1 &4359826508106861558
 GameObject:

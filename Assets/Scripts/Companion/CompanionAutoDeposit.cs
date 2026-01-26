@@ -5,6 +5,21 @@ using UnityEngine;
 /// <summary>
 /// Handles automatic resource depositing after idle timeout.
 /// Finds nearest depot, navigates to it, deposits resources, then returns.
+///
+/// <para><b>Extension Points:</b></para>
+/// <list type="bullet">
+///   <item><see cref="OnAutoDepositStarted"/> - Subscribe to react when auto-deposit begins</item>
+///   <item><see cref="OnAutoDepositCompleted"/> - Subscribe to react when deposit cycle finishes</item>
+///   <item><see cref="OnNoDepotFound"/> - Subscribe to handle no-depot scenarios (e.g., show UI warning)</item>
+///   <item><see cref="FindNearestDepot"/> - Override in subclass for custom depot selection (priority, type filtering)</item>
+/// </list>
+///
+/// <para><b>Integration:</b></para>
+/// <list type="bullet">
+///   <item>Uses <see cref="BuildingRegistry"/> for depot discovery</item>
+///   <item>Subscribes to <see cref="BuildingRegistry.OnBuildingRemoved"/> for depot destruction handling</item>
+///   <item>Works with any <see cref="IResourceStorage"/> implementation</item>
+/// </list>
 /// </summary>
 public class CompanionAutoDeposit : MonoBehaviour
 {
@@ -70,6 +85,12 @@ public class CompanionAutoDeposit : MonoBehaviour
         {
             movement.OnDestinationReached += HandleDestinationReached;
         }
+
+        // Phase 8: Subscribe to BuildingRegistry events for depot destruction handling
+        if (BuildingRegistry.Instance != null)
+        {
+            BuildingRegistry.Instance.OnBuildingRemoved += HandleBuildingRemoved;
+        }
     }
 
     private void OnDestroy()
@@ -88,16 +109,29 @@ public class CompanionAutoDeposit : MonoBehaviour
         {
             movement.OnDestinationReached -= HandleDestinationReached;
         }
+
+        // Phase 8: Unsubscribe from BuildingRegistry events
+        if (BuildingRegistry.Instance != null)
+        {
+            BuildingRegistry.Instance.OnBuildingRemoved -= HandleBuildingRemoved;
+        }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (controller == null || !controller.IsActive) return;
 
-        // Only tick idle timer in FollowingPlayer state
-        if (controller.CurrentState == CompanionState.FollowingPlayer)
+        // Check for state-specific updates
+        switch (controller.CurrentState)
         {
-            UpdateIdleTimer();
+            case CompanionState.FollowingPlayer:
+                UpdateIdleTimer();
+                break;
+
+            case CompanionState.MovingToDepot:
+                // Phase 8: Validate depot during navigation
+                ValidateTargetDepot();
+                break;
         }
     }
 
@@ -187,7 +221,13 @@ public class CompanionAutoDeposit : MonoBehaviour
         Debug.Log("[CompanionAutoDeposit] Auto-deposit cancelled");
     }
 
-    private IResourceStorage FindNearestDepot()
+    /// <summary>
+    /// Find the nearest valid depot within search radius.
+    /// Override this method to implement custom depot selection logic
+    /// (e.g., prioritize by resource type, prefer certain depot types, filter by capacity).
+    /// </summary>
+    /// <returns>The nearest <see cref="IResourceStorage"/> or null if none found within range.</returns>
+    protected virtual IResourceStorage FindNearestDepot()
     {
         float searchRadius = data?.DepotSearchRadius ?? 50f;
 
@@ -239,6 +279,92 @@ public class CompanionAutoDeposit : MonoBehaviour
             FinishReturn();
         }
     }
+
+    #region Phase 8: BuildingRegistry Integration
+
+    /// <summary>
+    /// Handle when a building is removed from the registry.
+    /// If our target depot was destroyed, find an alternative or cancel.
+    /// </summary>
+    private void HandleBuildingRemoved(Building building)
+    {
+        // Check if our target depot was removed
+        if (!isAutoDepositTriggered || targetDepot == null) return;
+
+        var targetMono = targetDepot as MonoBehaviour;
+        if (targetMono == null) return;
+
+        if (targetMono.gameObject == building.gameObject)
+        {
+            Debug.LogWarning("[CompanionAutoDeposit] Target depot was destroyed!");
+            RetryOrCancel();
+        }
+    }
+
+    /// <summary>
+    /// Validate that the target depot still exists and is operational.
+    /// Called each frame during MovingToDepot state.
+    /// </summary>
+    private void ValidateTargetDepot()
+    {
+        // Ensure depot reference still exists
+        if (targetDepot == null || targetDepotTransform == null)
+        {
+            Debug.LogWarning("[CompanionAutoDeposit] Target depot became null");
+            RetryOrCancel();
+            return;
+        }
+
+        // Check if depot GameObject is still active
+        var targetMono = targetDepot as MonoBehaviour;
+        if (targetMono == null || !targetMono.gameObject.activeInHierarchy)
+        {
+            Debug.LogWarning("[CompanionAutoDeposit] Target depot is no longer active");
+            RetryOrCancel();
+            return;
+        }
+
+        // Check if depot is still operational (via Building component)
+        var building = targetDepotTransform.GetComponent<Building>();
+        if (building != null && !building.IsOperational)
+        {
+            Debug.LogWarning("[CompanionAutoDeposit] Target depot is not operational");
+            RetryOrCancel();
+        }
+    }
+
+    /// <summary>
+    /// Try to find an alternative depot, or cancel auto-deposit if none available.
+    /// </summary>
+    private void RetryOrCancel()
+    {
+        // Clear current target
+        var previousDepot = targetDepot;
+        targetDepot = null;
+        targetDepotTransform = null;
+
+        // Try to find another depot
+        IResourceStorage newDepot = FindNearestDepot();
+
+        if (newDepot != null && newDepot != previousDepot)
+        {
+            targetDepot = newDepot;
+            targetDepotTransform = (newDepot as MonoBehaviour)?.transform;
+
+            if (targetDepotTransform != null)
+            {
+                movement?.SetDestination(targetDepotTransform.position);
+                Debug.Log($"[CompanionAutoDeposit] Redirecting to alternative depot at {targetDepotTransform.position}");
+                return;
+            }
+        }
+
+        // No alternative found, cancel and return to player
+        Debug.Log("[CompanionAutoDeposit] No alternative depot found, cancelling auto-deposit");
+        CancelAutoDeposit();
+    }
+
+    #endregion
 
     private void PerformDeposit()
     {

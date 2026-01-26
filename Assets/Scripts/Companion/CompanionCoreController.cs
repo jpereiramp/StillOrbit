@@ -3,6 +3,25 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// Central coordinator for companion behavior.
+/// Manages state transitions and delegates to subsystems.
+///
+/// <para><b>Extension Points:</b></para>
+/// <list type="bullet">
+///   <item><see cref="OnCompanionActivated"/> - Subscribe to react when companion becomes active</item>
+///   <item><see cref="OnCompanionDeactivated"/> - Subscribe to react when companion is deactivated</item>
+///   <item><see cref="OnStateChanged"/> - Subscribe to track all state transitions</item>
+///   <item><see cref="OnCompanionMoved"/> - Subscribe to track teleportation events</item>
+/// </list>
+///
+/// <para><b>State Machine:</b></para>
+/// <para>Use <see cref="RequestStateChange"/> for validated transitions or <see cref="ForceState"/> for edge cases.</para>
+///
+/// <para><b>Multiple Companion Support (Future):</b></para>
+/// <para>Create a CompanionManager singleton that tracks all CompanionCoreController instances.
+/// Register in Start(), unregister in OnDestroy().</para>
+/// </summary>
 public class CompanionCoreController : MonoBehaviour
 {
     [BoxGroup("Configuration")]
@@ -30,6 +49,10 @@ public class CompanionCoreController : MonoBehaviour
     [BoxGroup("References")]
     [Required]
     [SerializeField] private CompanionCallHandler callHandler;
+
+    [BoxGroup("References")]
+    [Required]
+    [SerializeField] private CompanionAutoDeposit autoDepositController;
 
     [BoxGroup("State")]
     [ShowInInspector, ReadOnly]
@@ -61,6 +84,7 @@ public class CompanionCoreController : MonoBehaviour
     public Vector3 Position => transform.position;
     public CompanionInventory Inventory => inventory;
     public CompanionMovementController MovementController => movementController;
+    public CompanionAutoDeposit AutoDepositController => autoDepositController;
     public CompanionCallHandler CallHandler => callHandler;
     public CompanionState CurrentState => currentState;
     public CompanionState PreviousState => previousState;

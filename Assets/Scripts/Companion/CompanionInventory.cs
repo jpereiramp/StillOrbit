@@ -5,7 +5,24 @@ using UnityEngine;
 
 /// <summary>
 /// Handles resource storage for the companion.
-/// Implements IResourceHolder for compatibility with existing systems.
+/// Implements <see cref="IResourceHolder"/> for compatibility with existing systems.
+///
+/// <para><b>Extension Points:</b></para>
+/// <list type="bullet">
+///   <item><see cref="OnResourcesChanged"/> - Subscribe to track individual resource changes</item>
+///   <item><see cref="OnInventoryCleared"/> - Subscribe to react when inventory is emptied</item>
+/// </list>
+///
+/// <para><b>Capacity Limits (Future Extension):</b></para>
+/// <para>To add capacity limits, override <see cref="AddResources"/> to check against a max capacity
+/// defined in <see cref="CompanionData"/>, and return partial amounts when exceeding capacity.</para>
+///
+/// <para><b>Integration:</b></para>
+/// <list type="bullet">
+///   <item>Uses <see cref="ResourceInventory"/> internally for O(1) storage operations</item>
+///   <item>Respects <see cref="CompanionData.CanAcceptResource"/> for resource filtering</item>
+///   <item>Compatible with <see cref="IResourceStorage"/> for depot deposits</item>
+/// </list>
 /// </summary>
 public class CompanionInventory : MonoBehaviour, IResourceHolder
 {
