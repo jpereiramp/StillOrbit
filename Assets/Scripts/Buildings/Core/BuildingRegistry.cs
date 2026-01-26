@@ -109,9 +109,9 @@ public class BuildingRegistry : MonoBehaviour
     /// Find the nearest building with a specific capability to a position.
     /// </summary>
     /// <typeparam name="T">The interface type to search for.</typeparam>
-    /// <param name="position">The position to measure distance from.</param>
+    /// <param name="fromPosition">The position to measure distance from.</param>
     /// <returns>The nearest building with the capability, or null if none found.</returns>
-    public T FindNearest<T>(Vector3 position) where T : class
+    public T FindNearest<T>(Vector3 fromPosition) where T : class
     {
         T nearest = null;
         float nearestDistSq = float.MaxValue;
@@ -120,7 +120,7 @@ public class BuildingRegistry : MonoBehaviour
         {
             if (building is T capability)
             {
-                float distSq = (building.transform.position - position).sqrMagnitude;
+                float distSq = (building.transform.position - fromPosition).sqrMagnitude;
                 if (distSq < nearestDistSq)
                 {
                     nearestDistSq = distSq;
@@ -136,7 +136,7 @@ public class BuildingRegistry : MonoBehaviour
     /// Find the nearest building with a specific capability to a position.
     /// Also outputs the distance.
     /// </summary>
-    public T FindNearest<T>(Vector3 position, out float distance) where T : class
+    public T FindNearest<T>(Vector3 fromPosition, out float distance) where T : class
     {
         T nearest = null;
         float nearestDistSq = float.MaxValue;
@@ -145,7 +145,7 @@ public class BuildingRegistry : MonoBehaviour
         {
             if (building is T capability)
             {
-                float distSq = (building.transform.position - position).sqrMagnitude;
+                float distSq = (building.transform.position - fromPosition).sqrMagnitude;
                 if (distSq < nearestDistSq)
                 {
                     nearestDistSq = distSq;
@@ -162,9 +162,9 @@ public class BuildingRegistry : MonoBehaviour
     /// Find all buildings with a specific capability within a radius.
     /// </summary>
     /// <typeparam name="T">The interface type to search for.</typeparam>
-    /// <param name="position">The center position.</param>
+    /// <param name="fromPosition">The center position.</param>
     /// <param name="radius">The search radius.</param>
-    public List<T> FindWithinRadius<T>(Vector3 position, float radius) where T : class
+    public List<T> FindWithinRadius<T>(Vector3 fromPosition, float radius) where T : class
     {
         var result = new List<T>();
         float radiusSq = radius * radius;
@@ -173,7 +173,7 @@ public class BuildingRegistry : MonoBehaviour
         {
             if (building is T capability)
             {
-                float distSq = (building.transform.position - position).sqrMagnitude;
+                float distSq = (building.transform.position - fromPosition).sqrMagnitude;
                 if (distSq <= radiusSq)
                 {
                     result.Add(capability);
