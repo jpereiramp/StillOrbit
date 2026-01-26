@@ -49,6 +49,7 @@
   <Project Path="Unity.AI.Navigation.Updater.csproj" />
   <Project Path="UnityEditor.UI.csproj" />
   <Project Path="Assembly-CSharp-Editor-firstpass.csproj" />
+  <Project Path="Unity.2D.Sprite.Editor.csproj" />
   <Project Path="Unity.AI.Navigation.Editor.csproj" />
   <Project Path="Unity.Multiplayer.Center.Common.csproj" />
   <Project Path="VFolders.csproj" />
@@ -76,6 +77,7 @@
   <Project Path="CodeStage.Package2Folder.csproj" />
   <Project Path="Unity.RenderPipelines.Universal.Shaders.csproj" />
   <Project Path="Unity.RenderPipelines.Core.Runtime.Shared.csproj" />
+  <Project Path="Unity.2D.Sprite.AIIntegration.Editor.csproj" />
   <Project Path="Wingman.csproj" />
   <Project Path="Boxophobic.PolyverseSkies.Runtime.csproj" />
   <Project Path="Unity.VisualScripting.DocCodeExamples.csproj" />

@@ -17,6 +17,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private PlayerAimController aimController;
     [SerializeField] private PlayerInteractionController interactionController;
     [SerializeField] private PlayerInventory inventory;
+    [SerializeField] private PlayerResourceInventory resourceInventory;
     [SerializeField] private HealthComponent healthComponent;
     [SerializeField] private PlayerCombatManager combatManager;
 
@@ -30,6 +31,7 @@ public class PlayerManager : MonoBehaviour
     public PlayerAimController AimController => aimController;
     public PlayerInteractionController InteractionController => interactionController;
     public PlayerInventory Inventory => inventory;
+    public PlayerResourceInventory ResourceInventory => resourceInventory;
     public HealthComponent HealthComponent => healthComponent;
     public PlayerCombatManager CombatManager => combatManager;
     public Animator Animator => animator;

@@ -143,6 +143,7 @@ GameObject:
   - component: {fileID: 6437506023504243459}
   - component: {fileID: 5583483807435740413}
   - component: {fileID: -461703376959736553}
+  - component: {fileID: 8451708890068511748}
   - component: {fileID: 3965061983001386789}
   - component: {fileID: 743974934871732703}
   m_Layer: 0
@@ -302,6 +303,7 @@ MonoBehaviour:
   aimController: {fileID: 4527346682214563505}
   interactionController: {fileID: 6437506023504243459}
   inventory: {fileID: -461703376959736553}
+  resourceInventory: {fileID: 8451708890068511748}
   healthComponent: {fileID: 743974934871732703}
   combatManager: {fileID: 3965061983001386789}
   animator: {fileID: 6911434538172840560}
@@ -440,6 +442,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
   slotCount: 20
+--- !u!114 &8451708890068511748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4291722035117816937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fed16392275b8f14e95c3d02495e4c43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerResourceInventory
+  inventory:
+    entries: []
 --- !u!114 &3965061983001386789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -454,9 +470,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombatManager
   playerManager: {fileID: 0}
   meleeAttackTrigger: MeleeAttack
-  fallbackHitSound: {fileID: 0}
-  fallbackHitSoundVolume: 1
-  fallbackHitVFXPrefab: {fileID: 0}
   fallbackVFXLifetime: 2
 --- !u!114 &743974934871732703
 MonoBehaviour:

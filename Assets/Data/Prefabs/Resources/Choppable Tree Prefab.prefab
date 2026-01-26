@@ -127,10 +127,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2b27b9a49812144491bed6b75c33211, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceNode
-  drops:
-  - item: {fileID: 11400000, guid: 3deec69cb476336408d9f55ffb49c1f5, type: 2}
-    minAmount: 1
-    maxAmount: 1
+  resourceDrops:
+  - resourceType: 1
+    minAmount: 3
+    maxAmount: 6
   deathSound: {fileID: 8300000, guid: 1ecf85b167cc547beb5e448c3084fd7f, type: 3}
   deathSoundVolume: 1
   deathVFXPrefab: {fileID: 0}

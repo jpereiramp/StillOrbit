@@ -4,15 +4,15 @@ using UnityEngine;
 
 /// <summary>
 /// Harvestable resource node (trees, rocks, ore deposits, etc.).
-/// Requires a HealthComponent to track damage. When destroyed, awards items to the player.
+/// Requires a HealthComponent to track damage. When destroyed, awards resources to the player.
 /// </summary>
 [RequireComponent(typeof(HealthComponent))]
 public class ResourceNode : MonoBehaviour
 {
     [BoxGroup("Resource Settings")]
-    [Tooltip("Items awarded when this resource is destroyed")]
+    [Tooltip("Resources awarded when this node is destroyed")]
     [SerializeField]
-    private List<ResourceDrop> drops = new List<ResourceDrop>();
+    private List<ResourceNodeDrop> resourceDrops = new List<ResourceNodeDrop>();
 
     [BoxGroup("Death Effects")]
     [Tooltip("Sound played when resource is destroyed")]
@@ -101,42 +101,34 @@ public class ResourceNode : MonoBehaviour
 
     private void AwardDrops()
     {
-        if (drops == null || drops.Count == 0)
+        if (resourceDrops == null || resourceDrops.Count == 0)
         {
-            Debug.Log("[ResourceNode] No drops configured");
+            Debug.Log("[ResourceNode] No resource drops configured");
             return;
         }
 
-        // Get player inventory
-        PlayerInventory inventory = null;
+        // Get player resource inventory via IResourceHolder interface
+        IResourceHolder resourceHolder = null;
         if (PlayerManager.Instance != null)
         {
-            inventory = PlayerManager.Instance.Inventory;
+            resourceHolder = PlayerManager.Instance.ResourceInventory;
         }
 
-        foreach (var drop in drops)
+        if (resourceHolder == null)
         {
-            if (drop.item == null) continue;
+            Debug.LogWarning("[ResourceNode] No IResourceHolder found on player");
+            return;
+        }
+
+        foreach (var drop in resourceDrops)
+        {
+            if (drop.resourceType == ResourceType.None) continue;
 
             int amount = Random.Range(drop.minAmount, drop.maxAmount + 1);
             if (amount <= 0) continue;
 
-            // TODO: Actually add items to inventory when inventory system supports quantities
-            // For now, just log what would be awarded
-            Debug.Log($"[ResourceNode] Awarding {amount}x {drop.item.ItemName} to player");
-
-            if (inventory != null)
-            {
-                for (int i = 0; i < amount; i++)
-                {
-                    bool added = inventory.TryAddItem(drop.item);
-                    if (!added)
-                    {
-                        Debug.LogWarning($"[ResourceNode] Inventory full, could not add {drop.item.ItemName}");
-                        break;
-                    }
-                }
-            }
+            resourceHolder.AddResources(drop.resourceType, amount);
+            Debug.Log($"[ResourceNode] Awarded {amount}x {drop.resourceType} to player");
         }
     }
 
@@ -155,13 +147,13 @@ public class ResourceNode : MonoBehaviour
 }
 
 /// <summary>
-/// Defines an item drop with quantity range.
+/// Defines a resource drop with quantity range for ResourceNode.
 /// </summary>
 [System.Serializable]
-public class ResourceDrop
+public class ResourceNodeDrop
 {
-    [Tooltip("The item to drop")]
-    public ItemData item;
+    [Tooltip("The type of resource to award")]
+    public ResourceType resourceType;
 
     [Tooltip("Minimum amount to drop")]
     [Min(0)]

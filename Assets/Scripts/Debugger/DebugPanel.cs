@@ -7,7 +7,7 @@ public class DebugPanel : MonoBehaviour
 
     private void OnGUI()
     {
-        GUILayout.BeginArea(new Rect(10, 10, 300, 250), "Debug Panel", GUI.skin.window);
+        GUILayout.BeginArea(new Rect(10, 10, 300, 300), "Debug Panel", GUI.skin.window);
         if (playerManager == null) return;
 
         // Equipment info
@@ -49,6 +49,20 @@ public class DebugPanel : MonoBehaviour
                 if (!slot.IsEmpty) usedSlots++;
             }
             GUILayout.Label($"Inventory: {usedSlots}/{inventory.SlotCount} slots used");
+        }
+
+        // Resource inventory info
+        var resourceInventory = playerManager.ResourceInventory;
+        if (resourceInventory != null)
+        {
+            GUILayout.Label("Resources:");
+            foreach (var resourceType in System.Enum.GetValues(typeof(ResourceType)))
+            {
+                if ((ResourceType)resourceType == ResourceType.None) continue;
+                int amount = resourceInventory.GetResourceAmount((ResourceType)resourceType);
+                if (amount > 0)
+                    GUILayout.Label($"- {resourceType}: {amount}");
+            }
         }
 
         GUILayout.EndArea();
