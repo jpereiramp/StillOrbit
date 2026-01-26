@@ -117,6 +117,26 @@ public class BuildingGhostController : MonoBehaviour
         ApplyValidationMaterial(validationResult.IsValid);
     }
 
+    public bool ValidatePlacementConfirmation()
+    {
+        if (currentGhost == null || currentBuildingData == null)
+        {
+            Debug.LogWarning("No ghost or building data to validate.");
+            return false;
+        }
+
+        var validationResult = placementValidator.Validate(currentGhost.transform.position, GhostRotation, currentBuildingData);
+        if (validationResult.IsValid)
+        {
+            Debug.Log("Placement is valid.");
+        }
+        else
+        {
+            Debug.LogWarning("Placement is invalid: " + validationResult.FailureReason);
+        }
+        return validationResult.IsValid;
+    }
+
     private void DisableGhostComponents(GameObject ghost)
     {
         // Disable Building component

@@ -31,11 +31,6 @@ public class BuildPlacementValidator : MonoBehaviour
         public static ValidationResult Invalid(string reason) => new ValidationResult { IsValid = false, FailureReason = reason };
     }
 
-    public bool IsValidPlacement(Vector3 placementPosition, Quaternion rotation, BuildingData building)
-    {
-        return Validate(placementPosition, rotation, building).IsValid;
-    }
-
     public ValidationResult Validate(Vector3 placementPosition, Quaternion rotation, BuildingData building)
     {
         if (building == null || building.BuildingPrefab == null)

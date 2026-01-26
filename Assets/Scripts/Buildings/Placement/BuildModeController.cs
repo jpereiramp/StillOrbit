@@ -35,6 +35,8 @@ public class BuildModeController : MonoBehaviour
     public bool IsInBuildMode => currentState != BuildModeState.Inactive;
     public BuildingData SelectedBuilding => selectedBuilding;
     public BuildingsDatabase BuildingsDatabase => buildingsDatabase;
+    public BuildingGhostController GhostController => ghostController;
+
 
     // Events
     public event Action<BuildModeState> OnBuildModeStateChanged;
@@ -57,6 +59,13 @@ public class BuildModeController : MonoBehaviour
 
     private void Update()
     {
+        HandleInput();
+    }
+    #endregion
+
+    #region Inputs
+    private void HandleInput()
+    {
         if (playerManager.InputHandler.ToggleBuildModePressed)
         {
             ToggleBuildMode();
@@ -65,6 +74,8 @@ public class BuildModeController : MonoBehaviour
 
         if (playerManager.InputHandler.CancelBuildPressed)
         {
+            Debug.Log($"[BuildModeController] Cancel pressed. Current state: {currentState}");
+
             if (currentState == BuildModeState.Placing)
             {
                 EnterMenuMode();
@@ -73,11 +84,21 @@ public class BuildModeController : MonoBehaviour
             {
                 ExitBuildMode();
             }
+
             playerManager.InputHandler.CancelBuildPressed = false;
+            Debug.Log($"[BuildModeController] After cancel. New state: {currentState}");
+        }
+
+        if (playerManager.InputHandler.ConfirmBuildPressed)
+        {
+            Debug.Log("confirm input detected");
+            TryConfirmBuildPlacement();
+            playerManager.InputHandler.ConfirmBuildPressed = false;
         }
     }
     #endregion
 
+    #region Modes
     private void ToggleBuildMode()
     {
         if (currentState == BuildModeState.Inactive)
@@ -97,24 +118,26 @@ public class BuildModeController : MonoBehaviour
 
     private void EnterMenuMode()
     {
-        SetBuildModeState(BuildModeState.MenuOpen);
-        SetSelectedBuilding(null);
-
+        // Clear ghost before nulling selectedBuilding
         if (ghostController != null)
         {
             ghostController.ClearGhost();
         }
+
+        SetSelectedBuilding(null);
+        SetBuildModeState(BuildModeState.MenuOpen);
     }
 
     private void ExitBuildMode()
     {
-        SetBuildModeState(BuildModeState.Inactive);
-        SetSelectedBuilding(null);
-
+        // Clear ghost before nulling selectedBuilding
         if (ghostController != null)
         {
             ghostController.ClearGhost();
         }
+
+        SetSelectedBuilding(null);
+        SetBuildModeState(BuildModeState.Inactive);
     }
 
     public void SetSelectedBuilding(BuildingData buildingData)
@@ -126,10 +149,16 @@ public class BuildModeController : MonoBehaviour
 
             if (ghostController != null)
             {
-                ghostController.ShowGhost(selectedBuilding);
+                if (selectedBuilding != null)
+                {
+                    ghostController.ShowGhost(selectedBuilding);
+                    SetBuildModeState(BuildModeState.Placing);
+                }
+                else
+                {
+                    ghostController.ClearGhost();
+                }
             }
-
-            SetBuildModeState(BuildModeState.Placing);
         }
     }
 
@@ -144,6 +173,100 @@ public class BuildModeController : MonoBehaviour
         SetPlayerControlsEnabled(newState == BuildModeState.Inactive || newState == BuildModeState.Placing);
         playerManager.AimController.SetCursorInteractionEnabled(newState == BuildModeState.MenuOpen);
     }
+    #endregion
+
+    #region Placement
+    /// <summary>
+    /// Attempt to place the building at the current ghost position.
+    /// </summary>
+    public void TryConfirmBuildPlacement()
+    {
+        if (currentState != BuildModeState.Placing)
+        {
+            return;
+        }
+
+        if (selectedBuilding == null)
+        {
+            Debug.LogWarning("[BuildModeController] No building selected");
+            return;
+        }
+
+        if (ghostController == null || !ghostController.HasGhost)
+        {
+            Debug.LogWarning("[BuildModeController] No ghost to place");
+            return;
+        }
+
+        // Check validity
+        if (!ghostController.ValidatePlacementConfirmation())
+        {
+            Debug.Log("[BuildModeController] Invalid placement position");
+            // TODO: Play error sound
+            return;
+        }
+
+        // Check and deduct resources
+        if (!TryDeductBuildingCosts(selectedBuilding))
+        {
+            Debug.Log("[BuildModeController] Cannot afford building");
+            // TODO: Play error sound
+            return;
+        }
+
+        // Instantiate the building
+        Building newBuilding = InstantiateBuilding(
+            selectedBuilding,
+            ghostController.GhostPosition,
+            ghostController.GhostRotation
+        );
+
+        if (newBuilding != null)
+        {
+            OnBuildingPlaced?.Invoke(newBuilding);
+            Debug.Log($"[BuildModeController] Placed: {selectedBuilding.BuildingName} at {ghostController.GhostPosition}");
+        }
+
+        // Clean up and exit - this should clear ghost, null selection, and go to Inactive
+        ExitBuildMode();
+
+        Debug.Log($"[BuildModeController] Post-placement state: {currentState}, Selected: {selectedBuilding}, HasGhost: {ghostController?.HasGhost}");
+    }
+
+    private Building InstantiateBuilding(BuildingData buildingData, Vector3 position, Quaternion rotation)
+    {
+        if (buildingData == null || buildingData.BuildingPrefab == null)
+        {
+            Debug.LogError("[BuildModeController] Cannot instantiate: null building data or prefab");
+            return null;
+        }
+
+        GameObject instance = Instantiate(buildingData.BuildingPrefab, position, rotation);
+        instance.name = buildingData.BuildingName;
+
+        // Ensure correct layer
+        SetLayerRecursive(instance, LayerMask.NameToLayer("Building"));
+
+        // Get and return the Building component
+        Building building = instance.GetComponent<Building>();
+
+        if (building == null)
+        {
+            Debug.LogWarning($"[BuildModeController] Placed object has no Building component: {buildingData.BuildingName}");
+        }
+
+        return building;
+    }
+
+    private void SetLayerRecursive(GameObject obj, int layer)
+    {
+        obj.layer = layer;
+        foreach (Transform child in obj.transform)
+        {
+            SetLayerRecursive(child.gameObject, layer);
+        }
+    }
+    #endregion
 
     #region Controls
     private void SetPlayerControlsEnabled(bool enabled)

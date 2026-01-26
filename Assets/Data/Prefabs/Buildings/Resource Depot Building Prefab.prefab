@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1544900257336118894}
   - component: {fileID: 766123737481685464}
   - component: {fileID: 8917881859467739621}
-  m_Layer: 7
+  m_Layer: 20
   m_Name: Building
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,7 +121,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1458867605452908063}
-  m_Layer: 7
+  - component: {fileID: -8941347353656886576}
+  m_Layer: 20
   m_Name: Resource Depot Building Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -144,3 +145,16 @@ Transform:
   - {fileID: 5895787996324362057}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-8941347353656886576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3491991574591225346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b7bb54498b18f64787a5e4095428712, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceDepot
+  buildingData: {fileID: 11400000, guid: 02e3d186bf21c5e4aa551bbed78ce029, type: 2}
