@@ -31,10 +31,19 @@ public class CompanionCoreController : MonoBehaviour
     [ShowInInspector, ReadOnly]
     private Transform targetPlayerTransform;
 
+    [BoxGroup("State")]
+    [ShowInInspector, ReadOnly]
+    private CompanionState currentState = CompanionState.Inactive;
+
+    [BoxGroup("State")]
+    [ShowInInspector, ReadOnly]
+    private CompanionState previousState = CompanionState.Inactive;
+
     // Events
     public event Action OnCompanionActivated;
     public event Action OnCompanionDeactivated;
     public event Action<Vector3> OnCompanionMoved;
+    public event Action<CompanionState, CompanionState> OnStateChanged;
 
     // Public Accessors
     public CompanionData Data => companionData;
@@ -43,6 +52,8 @@ public class CompanionCoreController : MonoBehaviour
     public NavMeshAgent NavAgent => navAgent;
     public Vector3 Position => transform.position;
     public CompanionInventory Inventory => inventory;
+    public CompanionState CurrentState => currentState;
+    public CompanionState PreviousState => previousState;
 
     private void Awake()
     {
@@ -110,7 +121,10 @@ public class CompanionCoreController : MonoBehaviour
             interactionCollider.enabled = true;
         }
 
+        currentState = CompanionState.Idle;
+        OnStateChanged?.Invoke(CompanionState.Inactive, CompanionState.Idle);
         OnCompanionActivated?.Invoke();
+
         Debug.Log("[CompanionController] Companion activated");
     }
 
@@ -124,10 +138,7 @@ public class CompanionCoreController : MonoBehaviour
         isActive = false;
 
         // Stop movement
-        if (navAgent != null && navAgent.isOnNavMesh)
-        {
-            navAgent.ResetPath();
-        }
+        StopNavigation();
 
         if (visualRoot != null)
         {
@@ -139,7 +150,12 @@ public class CompanionCoreController : MonoBehaviour
             interactionCollider.enabled = false;
         }
 
+        previousState = currentState;
+        currentState = CompanionState.Inactive;
+
+        OnStateChanged?.Invoke(previousState, currentState);
         OnCompanionDeactivated?.Invoke();
+
         Debug.Log("[CompanionController] Companion deactivated");
     }
 
@@ -173,10 +189,7 @@ public class CompanionCoreController : MonoBehaviour
         }
 
         // Stop current navigation
-        if (navAgent.isOnNavMesh)
-        {
-            navAgent.ResetPath();
-        }
+        StopNavigation();
 
         // Warp to position
         navAgent.Warp(hit.position);
@@ -203,6 +216,173 @@ public class CompanionCoreController : MonoBehaviour
         if (companionData == null) return false;
         return GetDistanceToPlayer() <= companionData.InteractionRange;
     }
+
+    private void StopNavigation()
+    {
+        if (navAgent != null && navAgent.isOnNavMesh)
+        {
+            navAgent.ResetPath();
+            navAgent.velocity = Vector3.zero;
+        }
+    }
+
+    #region State Machine
+    /// <summary>
+    /// Request a state change. Validates transition and invokes callbacks.
+    /// </summary>
+    public bool RequestStateChange(CompanionState newState)
+    {
+        if (currentState == newState) return true;
+
+        // Validate transition
+        if (!IsValidTransition(currentState, newState))
+        {
+            Debug.LogWarning($"[CompanionController] Invalid state transition: {currentState} -> {newState}");
+            return false;
+        }
+
+        // Exit current state
+        OnStateExit(currentState);
+
+        // Change state
+        previousState = currentState;
+        currentState = newState;
+
+        // Enter new state
+        OnStateEnter(newState);
+
+        // Fire event
+        OnStateChanged?.Invoke(previousState, currentState);
+        Debug.Log($"[CompanionController] State: {previousState} -> {currentState}");
+
+        return true;
+    }
+
+    /// <summary>
+    /// Force a state change without validation (use sparingly).
+    /// </summary>
+    public void ForceState(CompanionState newState)
+    {
+        if (currentState == newState) return;
+
+        OnStateExit(currentState);
+        previousState = currentState;
+        currentState = newState;
+        OnStateEnter(newState);
+        OnStateChanged?.Invoke(previousState, currentState);
+        Debug.Log($"[CompanionController] State forced: {previousState} -> {currentState}");
+    }
+
+    private bool IsValidTransition(CompanionState from, CompanionState to)
+    {
+        // Define valid transitions
+        switch (from)
+        {
+            case CompanionState.Inactive:
+                // Can only go to BeingCalled or Idle from inactive
+                return to == CompanionState.BeingCalled || to == CompanionState.Idle;
+
+            case CompanionState.Idle:
+                // From idle, can be called, start following, or go to depot
+                return to == CompanionState.BeingCalled
+                    || to == CompanionState.FollowingPlayer
+                    || to == CompanionState.MovingToDepot
+                    || to == CompanionState.Inactive;
+
+            case CompanionState.BeingCalled:
+                // After being called, go to following
+                return to == CompanionState.FollowingPlayer
+                    || to == CompanionState.Idle
+                    || to == CompanionState.Inactive;
+
+            case CompanionState.FollowingPlayer:
+                // While following, can go idle, move to depot, or be called again
+                return to == CompanionState.Idle
+                    || to == CompanionState.MovingToDepot
+                    || to == CompanionState.BeingCalled
+                    || to == CompanionState.Inactive;
+
+            case CompanionState.MovingToDepot:
+                // Moving to depot leads to depositing, or can be called back
+                return to == CompanionState.Depositing
+                    || to == CompanionState.BeingCalled
+                    || to == CompanionState.FollowingPlayer
+                    || to == CompanionState.Inactive;
+
+            case CompanionState.Depositing:
+                // After depositing, return to player or follow
+                return to == CompanionState.ReturningToPlayer
+                    || to == CompanionState.FollowingPlayer
+                    || to == CompanionState.BeingCalled
+                    || to == CompanionState.Inactive;
+
+            case CompanionState.ReturningToPlayer:
+                // After returning, follow or go idle
+                return to == CompanionState.FollowingPlayer
+                    || to == CompanionState.Idle
+                    || to == CompanionState.BeingCalled
+                    || to == CompanionState.Inactive;
+
+            default:
+                return false;
+        }
+    }
+
+    private void OnStateEnter(CompanionState state)
+    {
+        switch (state)
+        {
+            case CompanionState.Inactive:
+                // Handled by Deactivate()
+                break;
+
+            case CompanionState.Idle:
+                // Stop movement
+                StopNavigation();
+                break;
+
+            case CompanionState.BeingCalled:
+                // Will be handled by spawn logic
+                break;
+
+            case CompanionState.FollowingPlayer:
+                // Will start following in Update
+                break;
+
+            case CompanionState.MovingToDepot:
+                // Will set destination in auto-deposit logic
+                break;
+
+            case CompanionState.Depositing:
+                // Will handle in depositing logic
+                StopNavigation();
+                break;
+
+            case CompanionState.ReturningToPlayer:
+                // Will set destination to player
+                break;
+        }
+    }
+
+    private void OnStateExit(CompanionState state)
+    {
+        // Cleanup when leaving a state
+        switch (state)
+        {
+            case CompanionState.BeingCalled:
+                // Nothing special
+                break;
+
+            case CompanionState.MovingToDepot:
+                // Clear depot target if needed
+                break;
+
+            case CompanionState.Depositing:
+                // Finalize deposit
+                break;
+        }
+    }
+    #endregion
 
 #if UNITY_EDITOR
     [Button("Activate"), BoxGroup("Debug")]
@@ -244,5 +424,14 @@ public class CompanionCoreController : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, companionData.FollowDistance);
     }
+
+    [Button("To Idle"), BoxGroup("Debug/States")]
+    private void DebugToIdle() => RequestStateChange(CompanionState.Idle);
+
+    [Button("To Following"), BoxGroup("Debug/States")]
+    private void DebugToFollowing() => RequestStateChange(CompanionState.FollowingPlayer);
+
+    [Button("To MovingToDepot"), BoxGroup("Debug/States")]
+    private void DebugToMovingToDepot() => RequestStateChange(CompanionState.MovingToDepot);
 #endif
 }
