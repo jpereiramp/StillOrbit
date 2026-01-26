@@ -6,7 +6,6 @@ using UnityEngine;
 /// Attach to any item prefab that should be interactable in the world.
 /// Replaces the old PickableObject and PickableItem classes.
 /// </summary>
-[RequireComponent(typeof(Collider))]
 public class WorldItem : MonoBehaviour, IPickable
 {
     [Required("Item Data is required for WorldItem to function")]
@@ -22,20 +21,11 @@ public class WorldItem : MonoBehaviour, IPickable
     [SerializeField, ReadOnly]
     private bool hasBeenPickedUp;
 
-    private Rigidbody rb;
-    private Collider[] colliders;
-
     public ItemData ItemData => itemData;
     public int Quantity => quantity;
 
     // IInteractable implementation
     public string InteractionPrompt => itemData != null ? $"Pick up {itemData.ItemName}" : "Pick up";
-
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-        colliders = GetComponents<Collider>();
-    }
 
     public bool CanInteract(GameObject interactor)
     {
@@ -61,19 +51,6 @@ public class WorldItem : MonoBehaviour, IPickable
             return null;
 
         hasBeenPickedUp = true;
-
-        // Disable physics
-        if (rb != null)
-        {
-            rb.isKinematic = true;
-            rb.detectCollisions = false;
-        }
-
-        // Disable colliders so it doesn't block raycasts anymore
-        foreach (var col in colliders)
-        {
-            col.enabled = false;
-        }
 
         // Destroy world object
         Destroy(gameObject);

@@ -19,6 +19,16 @@ public class MeleeWeapon : MonoBehaviour, IUsable
     [SerializeField]
     private WeaponHitbox weaponHitbox;
 
+    [BoxGroup("Audio")]
+    [Tooltip("Sound played when swinging the weapon (swoosh)")]
+    [SerializeField]
+    private AudioClip swingSFX;
+
+    [BoxGroup("Audio")]
+    [Range(0f, 1f)]
+    [SerializeField]
+    private float swingSFXVolume = 0.8f;
+
     [BoxGroup("Local Fallbacks")]
     [Tooltip("Used if ItemData doesn't provide damage values")]
     [SerializeField]
@@ -70,7 +80,10 @@ public class MeleeWeapon : MonoBehaviour, IUsable
 
         lastAttackTime = Time.time;
 
-        // Invoke attack event (sounds, VFX, etc.)
+        // Play swing sound (swoosh)
+        PlaySwingSFX();
+
+        // Invoke attack event (additional sounds, VFX, etc.)
         onAttack?.Invoke();
 
         // Delegate to combat manager - it will trigger animation and call back to enable/disable hitbox
@@ -84,6 +97,14 @@ public class MeleeWeapon : MonoBehaviour, IUsable
         }
 
         return UseResult.Success;
+    }
+
+    private void PlaySwingSFX()
+    {
+        if (swingSFX != null)
+        {
+            AudioSource.PlayClipAtPoint(swingSFX, transform.position, swingSFXVolume);
+        }
     }
 
     /// <summary>

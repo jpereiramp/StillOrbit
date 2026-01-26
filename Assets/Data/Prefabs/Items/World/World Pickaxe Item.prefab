@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3892890152339454579}
   - component: {fileID: 6680265369163114726}
   - component: {fileID: 3051969617777425832}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pickaxe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 7944666567047551971}
   - component: {fileID: 5553571133172064206}
   - component: {fileID: 6922295321107510874}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: World Pickaxe Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}

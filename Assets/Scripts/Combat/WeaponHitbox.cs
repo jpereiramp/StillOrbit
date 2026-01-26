@@ -5,8 +5,10 @@ using UnityEngine;
 /// Trigger collider component for melee weapon hit detection.
 /// Attach to a child GameObject of the weapon with a trigger Collider.
 /// Reports hits to PlayerCombatManager when active.
+/// Requires Rigidbody (kinematic) for reliable trigger detection with static colliders.
 /// </summary>
 [RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(Rigidbody))]
 public class WeaponHitbox : MonoBehaviour
 {
     [BoxGroup("Settings")]
@@ -31,6 +33,14 @@ public class WeaponHitbox : MonoBehaviour
         {
             Debug.LogWarning($"[WeaponHitbox] Collider on {gameObject.name} is not a trigger. Setting isTrigger = true.");
             hitboxCollider.isTrigger = true;
+        }
+
+        // Ensure Rigidbody is kinematic (required for trigger detection with static objects)
+        var rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.useGravity = false;
         }
 
         // Start disabled
@@ -63,10 +73,13 @@ public class WeaponHitbox : MonoBehaviour
         if (other.transform.root == transform.root)
             return;
 
+        Vector3 hitPoint = other.ClosestPoint(transform.position);
+        Vector3 normal = (hitPoint - transform.position).normalized;
+
         // Report hit to combat manager
         if (PlayerCombatManager.Instance != null)
         {
-            PlayerCombatManager.Instance.RegisterHit(other.gameObject);
+            PlayerCombatManager.Instance.RegisterHit(other.gameObject, hitPoint, normal);
         }
     }
 

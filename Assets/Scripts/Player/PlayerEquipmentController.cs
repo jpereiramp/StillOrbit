@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -170,20 +169,48 @@ public class PlayerEquipmentController : MonoBehaviour
         return result;
     }
 
-    public void DropItem()
+    /// <summary>
+    /// Drops the currently equipped item into the world.
+    /// Spawns the WorldPrefab from ItemData and applies physics.
+    /// </summary>
+    /// <returns>The dropped ItemData, or null if nothing was dropped</returns>
+    public ItemData DropItem()
     {
         if (!HasEquippedItem)
-            return;
+            return null;
 
-        // Detach item
-        var item = UnequipItem(destroy: false);
+        // Save item data before unequipping
+        var droppedItemData = equippedItemData;
+
+        if (droppedItemData == null)
+        {
+            Debug.LogWarning("[Equipment] Cannot drop: no ItemData associated with equipped item");
+            UnequipItem(destroy: true);
+            return null;
+        }
+
+        if (droppedItemData.WorldPrefab == null)
+        {
+            Debug.LogWarning($"[Equipment] Cannot drop {droppedItemData.ItemName}: no WorldPrefab assigned");
+            UnequipItem(destroy: true);
+            return null;
+        }
+
+        // Calculate drop position (in front of player, slightly up)
+        Vector3 dropPosition = transform.position + transform.forward * 1f + Vector3.up * 1f;
+
+        // Destroy held item
+        UnequipItem(destroy: true);
+
+        // Spawn world prefab
+        var worldItem = Instantiate(droppedItemData.WorldPrefab, dropPosition, Quaternion.identity);
+        Debug.Log($"[Equipment] Dropped {droppedItemData.ItemName} at {dropPosition}");
 
         // Apply drop physics
-        var rb = item.GetComponent<Rigidbody>();
+        var rb = worldItem.GetComponent<Rigidbody>();
         if (rb != null)
         {
             rb.isKinematic = false;
-            rb.transform.SetParent(null);
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
 
@@ -191,6 +218,8 @@ public class PlayerEquipmentController : MonoBehaviour
             Vector3 dropForce = transform.forward * 2f + Vector3.up * 1f;
             rb.AddForce(dropForce, ForceMode.VelocityChange);
         }
+
+        return droppedItemData;
     }
 
     private void SetupHeldItem(GameObject item)

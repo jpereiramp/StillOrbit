@@ -35,6 +35,7 @@ public class PlayerInteractionController : MonoBehaviour
     // Edge detection for inputs (prevent held button = repeated actions)
     private bool previousInteractInput;
     private bool previousPrimaryActionInput;
+    private bool previousDropInput;
 
     private void Awake()
     {
@@ -63,9 +64,17 @@ public class PlayerInteractionController : MonoBehaviour
             HandlePrimaryAction();
         }
 
+        // Drop input - rising edge only
+        bool dropPressed = inputHandler.DropInput && !previousDropInput;
+        if (dropPressed)
+        {
+            HandleDrop();
+        }
+
         // Update previous states for edge detection
         previousInteractInput = inputHandler.InteractInput;
         previousPrimaryActionInput = inputHandler.PrimaryActionInput;
+        previousDropInput = inputHandler.DropInput;
     }
 
     private void UpdateCurrentTarget()
@@ -213,6 +222,29 @@ public class PlayerInteractionController : MonoBehaviour
             {
                 inventory.TryRemoveItem(consumedItem);
             }
+        }
+    }
+
+    private void HandleDrop()
+    {
+        if (!equipmentController.HasEquippedItem)
+        {
+            Debug.Log("[Drop] No item equipped to drop");
+            return;
+        }
+
+        var itemToDrop = equipmentController.EquippedItemData;
+        var droppedItemData = equipmentController.DropItem();
+
+        if (droppedItemData != null)
+        {
+            // Remove from inventory
+            if (inventory != null && itemToDrop != null)
+            {
+                inventory.TryRemoveItem(itemToDrop);
+            }
+
+            Debug.Log($"[Drop] Dropped {droppedItemData.ItemName}");
         }
     }
 

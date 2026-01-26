@@ -18,6 +18,25 @@ public class PlayerCombatManager : MonoBehaviour
     [SerializeField]
     private string meleeAttackTrigger = "MeleeAttack";
 
+    [FoldoutGroup("Fallback Hit Effects")]
+    [Tooltip("Default hit sound when target has no HitEffectReceiver")]
+    [SerializeField]
+    private AudioClip fallbackHitSound;
+
+    [FoldoutGroup("Fallback Hit Effects")]
+    [Range(0f, 1f)]
+    [SerializeField]
+    private float fallbackHitSoundVolume = 1f;
+
+    [FoldoutGroup("Fallback Hit Effects")]
+    [Tooltip("Default hit VFX when target has no HitEffectReceiver")]
+    [SerializeField]
+    private GameObject fallbackHitVFXPrefab;
+
+    [FoldoutGroup("Fallback Hit Effects")]
+    [SerializeField]
+    private float fallbackVFXLifetime = 2f;
+
     [BoxGroup("Debug")]
     [ShowInInspector, ReadOnly]
     private bool isAttacking;
@@ -28,7 +47,7 @@ public class PlayerCombatManager : MonoBehaviour
 
     [BoxGroup("Debug")]
     [ShowInInspector, ReadOnly]
-    private List<IDamageable> hitTargetsThisSwing = new List<IDamageable>();
+    private readonly List<IDamageable> hitTargetsThisSwing = new List<IDamageable>();
 
     private void Awake()
     {
@@ -117,7 +136,7 @@ public class PlayerCombatManager : MonoBehaviour
     /// Called by weapon hitbox when it detects a hit during the swing.
     /// Applies damage immediately to avoid hitting the same target twice.
     /// </summary>
-    public void RegisterHit(GameObject hitObject)
+    public void RegisterHit(GameObject hitObject, Vector3 hitPoint, Vector3 hitNormal)
     {
         if (!isAttacking || currentWeapon == null)
             return;
@@ -142,7 +161,53 @@ public class PlayerCombatManager : MonoBehaviour
         damageable.TakeDamage(damage, targetType, playerManager.gameObject);
         currentWeapon.NotifyHit();
 
+        // Play hit effects
+        PlayHitEffects(hitObject, hitPoint, hitNormal);
+
         Debug.Log($"[Combat] Hit {hitObject.name} ({targetType}) for {damage:F1} damage");
+    }
+
+    /// <summary>
+    /// Plays hit effects on the target. Uses HitEffectReceiver if present, otherwise uses fallback.
+    /// </summary>
+    private void PlayHitEffects(GameObject hitObject, Vector3 hitPoint, Vector3 hitNormal)
+    {
+        // Look for HitEffectReceiver on hit object or its hierarchy
+        HitEffectReceiver hitEffectReceiver = FindHitEffectReceiverInObject(hitObject);
+
+        if (hitEffectReceiver != null)
+        {
+            // Use target's custom hit effects
+            hitEffectReceiver.PlayHitEffect(hitPoint, hitNormal);
+        }
+    }
+
+    /// <summary>
+    /// Searches for HitEffectReceiver component on the object, its parent, or root.
+    /// </summary>
+    private HitEffectReceiver FindHitEffectReceiverInObject(GameObject obj)
+    {
+        if (obj == null) return null;
+
+        // Check self
+        var receiver = obj.GetComponent<HitEffectReceiver>();
+        if (receiver != null) return receiver;
+
+        // Check parent
+        if (obj.transform.parent != null)
+        {
+            receiver = obj.transform.parent.GetComponent<HitEffectReceiver>();
+            if (receiver != null) return receiver;
+        }
+
+        // Check root
+        if (obj.transform.root != null && obj.transform.root != obj.transform)
+        {
+            receiver = obj.transform.root.GetComponent<HitEffectReceiver>();
+            if (receiver != null) return receiver;
+        }
+
+        return null;
     }
 
     /// <summary>
