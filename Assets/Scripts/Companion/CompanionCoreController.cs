@@ -19,6 +19,10 @@ public class CompanionCoreController : MonoBehaviour
     [BoxGroup("References")]
     [SerializeField] private Collider interactionCollider;
 
+    [BoxGroup("References")]
+    [Required]
+    [SerializeField] private CompanionInventory inventory;
+
     [BoxGroup("State")]
     [ShowInInspector, ReadOnly]
     private bool isActive = true;
@@ -38,6 +42,7 @@ public class CompanionCoreController : MonoBehaviour
     public Transform TargetPlayerTransform => targetPlayerTransform;
     public NavMeshAgent NavAgent => navAgent;
     public Vector3 Position => transform.position;
+    public CompanionInventory Inventory => inventory;
 
     private void Awake()
     {
