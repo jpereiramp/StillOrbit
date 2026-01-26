@@ -140,6 +140,8 @@ GameObject:
   - component: {fileID: -1746218762464170626}
   - component: {fileID: 5945210950267213824}
   - component: {fileID: 5772263457893183575}
+  - component: {fileID: 5139128966428655725}
+  - component: {fileID: 2012108796241124136}
   m_Layer: 0
   m_Name: Companion Vehicle
   m_TagString: Untagged
@@ -245,6 +247,7 @@ MonoBehaviour:
   interactionCollider: {fileID: 6744116573147998231}
   inventory: {fileID: 5945210950267213824}
   movementController: {fileID: 5772263457893183575}
+  callHandler: {fileID: 5139128966428655725}
 --- !u!114 &5945210950267213824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,6 +275,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CompanionMovementController
   controller: {fileID: -1746218762464170626}
   navAgent: {fileID: 3614427077046145078}
+--- !u!114 &5139128966428655725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2256328295565750834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76a302324fb8e914abcfedd8e3cc45d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CompanionCallHandler
+  controller: {fileID: -1746218762464170626}
+  maxSpawnAttempts: 10
+  teleportWhenCalled: 1
+--- !u!114 &2012108796241124136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2256328295565750834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3195e8ccdf412964ca217a2d57ba6e95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CompanionInteractionHandler
+  controller: {fileID: -1746218762464170626}
+  inventory: {fileID: 5945210950267213824}
 --- !u!1 &3780756455677573606
 GameObject:
   m_ObjectHideFlags: 0

@@ -27,6 +27,10 @@ public class CompanionCoreController : MonoBehaviour
     [Required]
     [SerializeField] private CompanionMovementController movementController;
 
+    [BoxGroup("References")]
+    [Required]
+    [SerializeField] private CompanionCallHandler callHandler;
+
     [BoxGroup("State")]
     [ShowInInspector, ReadOnly]
     private bool isActive = true;
@@ -57,6 +61,7 @@ public class CompanionCoreController : MonoBehaviour
     public Vector3 Position => transform.position;
     public CompanionInventory Inventory => inventory;
     public CompanionMovementController MovementController => movementController;
+    public CompanionCallHandler CallHandler => callHandler;
     public CompanionState CurrentState => currentState;
     public CompanionState PreviousState => previousState;
 
@@ -93,6 +98,21 @@ public class CompanionCoreController : MonoBehaviour
 
         // Start active
         SetActive(true);
+    }
+
+    private void Update()
+    {
+        // Handle inputs
+        HandleAllInputs();
+    }
+
+    private void HandleAllInputs()
+    {
+        if (PlayerManager.Instance.InputHandler.CallCompanionPressed)
+        {
+            callHandler.CallCompanion();
+            PlayerManager.Instance.InputHandler.CallCompanionPressed = false;
+        }
     }
 
     /// <summary>
