@@ -1,13 +1,50 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+
+public enum DebugPanelTab
+{
+    PlayerStatus,
+    BuildingStatus,
+}
 
 public class DebugPanel : MonoBehaviour
 {
     [SerializeField]
     private PlayerManager playerManager;
 
+    [SerializeField]
+    private BuildModeController buildModeController;
+
+    private int tabCount = DebugPanelTab.GetNames(typeof(DebugPanelTab)).Length;
+    private int currentTab = 0;
+
+    private void Update()
+    {
+        if (Keyboard.current.leftBracketKey.wasPressedThisFrame)
+            currentTab = (currentTab - 1 + tabCount) % tabCount;
+        if (Keyboard.current.rightBracketKey.wasPressedThisFrame)
+            currentTab = (currentTab + 1 + tabCount) % tabCount;
+    }
+
     private void OnGUI()
     {
-        GUILayout.BeginArea(new Rect(10, 10, 300, 300), "Debug Panel", GUI.skin.window);
+        GUILayout.BeginArea(new Rect(10, 10, 300, 300), "Debug Panel (" + ((DebugPanelTab)currentTab).ToString() + ")", GUI.skin.window);
+
+        switch ((DebugPanelTab)currentTab)
+        {
+            case DebugPanelTab.PlayerStatus:
+                RenderPlayerStatusTab();
+                break;
+            case DebugPanelTab.BuildingStatus:
+                RenderBuildingStatusTab();
+                break;
+        }
+
+        GUILayout.EndArea();
+    }
+
+    private void RenderPlayerStatusTab()
+    {
         if (playerManager == null) return;
 
         // Equipment info
@@ -64,7 +101,13 @@ public class DebugPanel : MonoBehaviour
                     GUILayout.Label($"- {resourceType}: {amount}");
             }
         }
+    }
 
-        GUILayout.EndArea();
+    private void RenderBuildingStatusTab()
+    {
+        if (buildModeController == null) return;
+
+        GUILayout.Label("Selected Building: " + buildModeController.SelectedBuilding?.BuildingName ?? "None");
+        GUILayout.Label("Build Mode State: " + buildModeController.CurrentState.ToString());
     }
 }

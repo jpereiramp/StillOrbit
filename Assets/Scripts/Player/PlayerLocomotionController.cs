@@ -507,4 +507,9 @@ public class PlayerLocomotionController : MonoBehaviour, ICharacterController
     public void OnDiscreteCollisionDetected(Collider hitCollider)
     {
     }
+
+    public void SetCharacterControllerMotorEnabled(bool enabled)
+    {
+        Motor.enabled = enabled;
+    }
 }
