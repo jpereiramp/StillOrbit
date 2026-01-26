@@ -46,6 +46,8 @@ public class PlayerAimController : MonoBehaviour
         {
             playerCameraController = GetComponent<PlayerCameraController>();
         }
+
+        SetCursorInteractionEnabled(false);
     }
 
     private void Update()
@@ -78,6 +80,20 @@ public class PlayerAimController : MonoBehaviour
         else
         {
             currentAimHitInfo = default;
+        }
+    }
+
+    public void SetCursorInteractionEnabled(bool enabled)
+    {
+        if (enabled)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
     }
 

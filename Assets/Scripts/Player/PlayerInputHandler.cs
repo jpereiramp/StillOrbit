@@ -16,10 +16,10 @@ public class PlayerInputHandler : MonoBehaviour
     public bool SecondaryActionInput = false;
     public bool InteractInput = false;
     public bool DropInput = false;
-    public bool ToggleBuildModeInput = false;
-    public bool RotateBuildingInput = false;
-    public bool ConfirmBuildInput = false;
-    public bool CancelBuildInput = false;
+    public bool ToggleBuildModePressed = false;
+    public bool RotateBuildingPressed = false;
+    public bool ConfirmBuildPressed = false;
+    public bool CancelBuildPressed = false;
     #endregion
 
     #region Lifecycle
@@ -140,22 +140,26 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnToggleBuildMode(InputAction.CallbackContext context)
     {
-        ToggleBuildModeInput = context.ReadValueAsButton();
+        if (context.performed)
+            ToggleBuildModePressed = true;
     }
 
     public void OnRotateBuilding(InputAction.CallbackContext context)
     {
-        RotateBuildingInput = context.ReadValueAsButton();
+        if (context.performed)
+            RotateBuildingPressed = true;
     }
 
     public void OnConfirmBuild(InputAction.CallbackContext context)
     {
-        ConfirmBuildInput = context.ReadValueAsButton();
+        if (context.performed)
+            ConfirmBuildPressed = true;
     }
 
     public void OnCancelBuild(InputAction.CallbackContext context)
     {
-        CancelBuildInput = context.ReadValueAsButton();
+        if (context.performed)
+            CancelBuildPressed = true;
     }
     #endregion
 }

@@ -2,15 +2,15 @@ using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public enum BuildModeState
-{
-    Inactive,
-    MenuOpen,
-    Placing
-}
-
 public class BuildModeController : MonoBehaviour
 {
+    public enum BuildModeState
+    {
+        Inactive,
+        MenuOpen,
+        Placing
+    }
+
     [BoxGroup("References")]
     [Required]
     [SerializeField] private BuildingsDatabase buildingsDatabase;
@@ -31,6 +31,7 @@ public class BuildModeController : MonoBehaviour
     public BuildModeState CurrentState => currentState;
     public bool IsInBuildMode => currentState != BuildModeState.Inactive;
     public BuildingData SelectedBuilding => selectedBuilding;
+    public BuildingsDatabase BuildingsDatabase => buildingsDatabase;
 
     // Events
     public event Action<BuildModeState> OnBuildModeStateChanged;
@@ -53,10 +54,13 @@ public class BuildModeController : MonoBehaviour
 
     private void Update()
     {
-        if (playerManager.InputHandler.ToggleBuildModeInput)
+        if (playerManager.InputHandler.ToggleBuildModePressed)
+        {
             ToggleBuildMode();
+            playerManager.InputHandler.ToggleBuildModePressed = false;
+        }
 
-        if (playerManager.InputHandler.CancelBuildInput)
+        if (playerManager.InputHandler.CancelBuildPressed)
         {
             if (currentState == BuildModeState.Placing)
             {
@@ -66,6 +70,7 @@ public class BuildModeController : MonoBehaviour
             {
                 ExitBuildMode();
             }
+            playerManager.InputHandler.CancelBuildPressed = false;
         }
     }
     #endregion
@@ -99,11 +104,12 @@ public class BuildModeController : MonoBehaviour
         SetSelectedBuilding(null);
     }
 
-    private void SetSelectedBuilding(BuildingData buildingData)
+    public void SetSelectedBuilding(BuildingData buildingData)
     {
         if (selectedBuilding != buildingData)
         {
             selectedBuilding = buildingData;
+            SetBuildModeState(BuildModeState.Placing);
             OnSelectedBuildingChanged?.Invoke(selectedBuilding);
         }
     }
@@ -115,6 +121,9 @@ public class BuildModeController : MonoBehaviour
             currentState = newState;
             OnBuildModeStateChanged?.Invoke(currentState);
         }
+
+        SetPlayerControlsEnabled(newState == BuildModeState.Inactive || newState == BuildModeState.Placing);
+        playerManager.AimController.SetCursorInteractionEnabled(newState == BuildModeState.MenuOpen);
     }
 
     #region Controls
@@ -125,6 +134,11 @@ public class BuildModeController : MonoBehaviour
         if (playerManager.LocomotionController != null)
         {
             playerManager.LocomotionController.SetCharacterControllerMotorEnabled(enabled);
+        }
+
+        if (playerManager.CameraController != null)
+        {
+            playerManager.CameraController.SetCameraMovementEnabled(enabled);
         }
     }
     #endregion

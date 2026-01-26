@@ -64,13 +64,6 @@ public class PlayerCameraController : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        // Lock the cursor to the center of the screen and hide it
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
-
     private void Update()
     {
         // Get the look input from the PlayerInputHandler
@@ -108,5 +101,10 @@ public class PlayerCameraController : MonoBehaviour
 
         Debug.LogWarning("No camera found in the scene. Please assign a camera to the PlayerCameraController.");
         return null;
+    }
+
+    public void SetCameraMovementEnabled(bool enabled)
+    {
+        this.enabled = enabled;
     }
 }
