@@ -19,21 +19,6 @@ public class PlayerCombatManager : MonoBehaviour
     private string meleeAttackTrigger = "MeleeAttack";
 
     [FoldoutGroup("Fallback Hit Effects")]
-    [Tooltip("Default hit sound when target has no HitEffectReceiver")]
-    [SerializeField]
-    private AudioClip fallbackHitSound;
-
-    [FoldoutGroup("Fallback Hit Effects")]
-    [Range(0f, 1f)]
-    [SerializeField]
-    private float fallbackHitSoundVolume = 1f;
-
-    [FoldoutGroup("Fallback Hit Effects")]
-    [Tooltip("Default hit VFX when target has no HitEffectReceiver")]
-    [SerializeField]
-    private GameObject fallbackHitVFXPrefab;
-
-    [FoldoutGroup("Fallback Hit Effects")]
     [SerializeField]
     private float fallbackVFXLifetime = 2f;
 

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 /// <summary>
 /// Simple inventory system for the player.
@@ -221,7 +221,7 @@ public class PlayerInventory : MonoBehaviour
         return items;
     }
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     [Button("Clear Inventory"), BoxGroup("Debug")]
     private void DebugClearInventory()
     {
@@ -231,5 +231,5 @@ public class PlayerInventory : MonoBehaviour
         }
         Debug.Log("Inventory cleared");
     }
-    #endif
+#endif
 }
