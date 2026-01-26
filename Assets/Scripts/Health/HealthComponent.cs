@@ -12,6 +12,7 @@ public class HealthComponent : MonoBehaviour, IDamageable
     [SerializeField] private int maxHealth = 100;
     [SerializeField] private int initialHealth = 100;
     [SerializeField] private int currentHealth;
+    [SerializeField] private bool isInvulnerable = false;
 
     [Header("Damage Type")]
     [Tooltip("What type of damage this entity receives (determines weapon effectiveness)")]
@@ -50,6 +51,7 @@ public class HealthComponent : MonoBehaviour, IDamageable
     {
         if (damage <= 0) return;
         if (currentHealth <= 0) return; // Already dead
+        if (isInvulnerable) return; // Cannot take damage
 
         currentHealth = Mathf.Max(0, currentHealth - damage);
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
@@ -59,6 +61,19 @@ public class HealthComponent : MonoBehaviour, IDamageable
             OnDeath?.Invoke();
         }
     }
+
+    /// <summary>
+    /// Set whether this entity is invulnerable to damage.
+    /// </summary>
+    public void SetInvulnerable(bool invulnerable)
+    {
+        isInvulnerable = invulnerable;
+    }
+
+    /// <summary>
+    /// Check if this entity is invulnerable.
+    /// </summary>
+    public bool IsInvulnerable => isInvulnerable;
 
     /// <summary>
     /// IDamageable implementation. Converts float damage to int and applies it.

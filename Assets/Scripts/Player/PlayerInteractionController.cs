@@ -129,7 +129,10 @@ public class PlayerInteractionController : MonoBehaviour
             return;
         }
 
-        Debug.Log($"[Pickup] Attempting to pick up: {itemData.ItemName}");
+        // Get quantity BEFORE calling PickUp (which destroys the object)
+        int quantity = pickable.Quantity;
+
+        Debug.Log($"[Pickup] Attempting to pick up: {itemData.ItemName} x{quantity}");
 
         // Can we pick it up?
         if (!itemData.CanPickup)
@@ -138,14 +141,14 @@ public class PlayerInteractionController : MonoBehaviour
             return;
         }
 
-        // Check if we have inventory space
+        // Check if we have inventory space for the full quantity
         if (inventory == null)
         {
             Debug.LogWarning("[Pickup] WARNING: No PlayerInventory component found on player!");
         }
-        else if (!inventory.HasSpace(itemData))
+        else if (!inventory.HasSpace(itemData, quantity))
         {
-            Debug.Log($"[Pickup] FAILED: Inventory full, cannot pick up {itemData.ItemName}");
+            Debug.Log($"[Pickup] FAILED: Inventory full, cannot pick up {quantity}x {itemData.ItemName}");
             return;
         }
 
@@ -157,7 +160,7 @@ public class PlayerInteractionController : MonoBehaviour
             return;
         }
 
-        Debug.Log($"[Pickup] Successfully picked up: {pickedItemData.ItemName}");
+        Debug.Log($"[Pickup] Successfully picked up: {pickedItemData.ItemName} x{quantity}");
 
         // Decide: equip it or just add to inventory?
         bool shouldEquip = ShouldEquipOnPickup(pickedItemData);
@@ -179,19 +182,19 @@ public class PlayerInteractionController : MonoBehaviour
             bool equipped = equipmentController.EquipItem(pickedItemData);
             Debug.Log($"[Pickup] Equip result: {equipped}");
 
-            // Also add to inventory (we're holding it, but it's "in" our inventory)
+            // Also add to inventory with quantity (we're holding it, but it's "in" our inventory)
             if (inventory != null)
             {
-                inventory.TryAddItem(pickedItemData);
+                inventory.TryAddItem(pickedItemData, quantity);
             }
         }
         else
         {
-            // Just add to inventory
+            // Just add to inventory with quantity
             if (inventory != null)
             {
-                inventory.TryAddItem(pickedItemData);
-                Debug.Log($"[Pickup] Added to inventory only");
+                inventory.TryAddItem(pickedItemData, quantity);
+                Debug.Log($"[Pickup] Added {quantity}x to inventory only");
             }
         }
     }

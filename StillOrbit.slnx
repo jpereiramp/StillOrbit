@@ -2,6 +2,7 @@
   <Project Path="Unity.Timeline.csproj" />
   <Project Path="Unity.RenderPipelines.GPUDriven.Runtime.csproj" />
   <Project Path="Unity.PlasticSCM.Editor.csproj" />
+  <Project Path="AstarPathfindingProject.csproj" />
   <Project Path="Unity.ShaderGraph.Editor.csproj" />
   <Project Path="Unity.RenderPipelines.Core.Runtime.csproj" />
   <Project Path="Unity.Mathematics.csproj" />
@@ -22,6 +23,7 @@
   <Project Path="Boxophobic.PolyverseSkies.Editor.csproj" />
   <Project Path="Boxophobic.Utils.Editor.csproj" />
   <Project Path="Unity.VisualScripting.Flow.Editor.csproj" />
+  <Project Path="AstarPathfindingProjectEditor.csproj" />
   <Project Path="Unity.VisualStudio.Editor.csproj" />
   <Project Path="Unity.InputSystem.csproj" />
   <Project Path="PPv2URPConverters.csproj" />
@@ -46,6 +48,7 @@
   <Project Path="Unity.Burst.Editor.csproj" />
   <Project Path="Unity.Rider.Editor.csproj" />
   <Project Path="Unity.VisualScripting.State.csproj" />
+  <Project Path="Drawing.csproj" />
   <Project Path="Unity.AI.Navigation.Updater.csproj" />
   <Project Path="UnityEditor.UI.csproj" />
   <Project Path="Assembly-CSharp-Editor-firstpass.csproj" />
@@ -53,6 +56,8 @@
   <Project Path="Unity.AI.Navigation.Editor.csproj" />
   <Project Path="Unity.Multiplayer.Center.Common.csproj" />
   <Project Path="VFolders.csproj" />
+  <Project Path="Assembly-CSharp-firstpass.csproj" />
+  <Project Path="AstarPackageToolsEditor.csproj" />
   <Project Path="Unity.InputSystem.ForUI.csproj" />
   <Project Path="Unity.AI.Navigation.csproj" />
   <Project Path="Unity.Collections.CodeGen.csproj" />
@@ -66,8 +71,10 @@
   <Project Path="Unity.VisualScripting.Shared.Editor.csproj" />
   <Project Path="Unity.SharpZipLib.Editor.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="andywiecko.BurstTriangulator.csproj" />
   <Project Path="Unity.EditorCoroutines.Editor.csproj" />
   <Project Path="Boxophobic.Utils.Scripts.csproj" />
+  <Project Path="PackageTools.csproj" />
   <Project Path="Unity.RenderPipeline.Universal.ShaderLibrary.csproj" />
   <Project Path="Sirenix.OdinInspector.Modules.UnityMathematics.csproj" />
   <Project Path="AssetInventory.JD.EditorAudioUtils.Editor.csproj" />
@@ -77,10 +84,12 @@
   <Project Path="CodeStage.Package2Folder.csproj" />
   <Project Path="Unity.RenderPipelines.Universal.Shaders.csproj" />
   <Project Path="Unity.RenderPipelines.Core.Runtime.Shared.csproj" />
+  <Project Path="DrawingEditor.csproj" />
   <Project Path="Unity.2D.Sprite.AIIntegration.Editor.csproj" />
   <Project Path="Wingman.csproj" />
   <Project Path="Boxophobic.PolyverseSkies.Runtime.csproj" />
   <Project Path="Unity.VisualScripting.DocCodeExamples.csproj" />
+  <Project Path="DrawingPackageToolsEditor.csproj" />
   <Project Path="Unity.PlasticSCM.Editor.Entities.csproj" />
   <Project Path="AssetInventory.Examples.csproj" />
   <Project Path="Unity.Collections.Editor.csproj" />

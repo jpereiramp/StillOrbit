@@ -12,6 +12,11 @@ public interface IPickable : IInteractable
     ItemData ItemData { get; }
 
     /// <summary>
+    /// The quantity of items in this stack.
+    /// </summary>
+    int Quantity { get; }
+
+    /// <summary>
     /// Picks up the item, removing it from the world.
     /// Returns the item data for inventory, or null if pickup failed.
     /// </summary>

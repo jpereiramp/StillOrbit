@@ -58,12 +58,33 @@ public class ItemData : ScriptableObject
     public GameObject HeldPrefab => heldPrefab != null ? heldPrefab : worldPrefab;
     public bool IsStackable => maxStackSize > 1;
 
-    #if UNITY_EDITOR
+    /// <summary>
+    /// Compare items by their ID (not by reference).
+    /// Useful if you ever create runtime item instances.
+    /// </summary>
+    public bool IsSameItem(ItemData other)
+    {
+        if (other == null) return false;
+        return ItemId == other.ItemId;
+    }
+
+#if UNITY_EDITOR
     [Button("Generate ID from Name"), BoxGroup("Identity")]
     private void GenerateId()
     {
         itemId = itemName.ToLowerInvariant().Replace(" ", "_");
         UnityEditor.EditorUtility.SetDirty(this);
     }
-    #endif
+
+    private void OnValidate()
+    {
+        // Warn if itemId is not set - this can cause issues with save/load
+        if (string.IsNullOrEmpty(itemId))
+        {
+            Debug.LogWarning($"[ItemData] '{name}' has no itemId set! " +
+                "This may cause issues if you rename the asset. " +
+                "Use 'Generate ID from Name' button to fix.", this);
+        }
+    }
+#endif
 }
