@@ -122,6 +122,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "CallCompanion",
+                    "type": "Button",
+                    "id": "32074c0b-414e-4cdf-aada-cba6b159a71b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -441,6 +450,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "CancelBuildingPlacement",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3fd95629-d532-4745-a7bc-61e98fbea216",
+                    "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "CallCompanion",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

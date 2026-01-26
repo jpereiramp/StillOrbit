@@ -7,19 +7,27 @@ public class PlayerInputHandler : MonoBehaviour
     #region Fields
     private PlayerControls controls;
 
+    // Movement
     public Vector2 MoveInput = Vector2.zero;
     public Vector2 LookInput = Vector2.zero;
     public bool JumpInput = false;
     public bool SprintInput = false;
     public bool CrouchInput = false;
+
+    // Actions
     public bool PrimaryActionInput = false;
     public bool SecondaryActionInput = false;
     public bool InteractInput = false;
     public bool DropInput = false;
+
+    // Building
     public bool ToggleBuildModePressed = false;
     public bool RotateBuildingPressed = false;
     public bool ConfirmBuildPressed = false;
     public bool CancelBuildPressed = false;
+
+    // Companion
+    public bool CallCompanionPressed = false;
     #endregion
 
     #region Lifecycle
@@ -56,6 +64,8 @@ public class PlayerInputHandler : MonoBehaviour
         controls.Player.ConfirmBuildingPlacement.canceled += OnConfirmBuild;
         controls.Player.CancelBuildingPlacement.performed += OnCancelBuild;
         controls.Player.CancelBuildingPlacement.canceled += OnCancelBuild;
+        controls.Player.CallCompanion.performed += OnCallCompanion;
+        controls.Player.CallCompanion.canceled += OnCallCompanion;
 
         controls.Enable();
     }
@@ -88,6 +98,9 @@ public class PlayerInputHandler : MonoBehaviour
         controls.Player.ConfirmBuildingPlacement.canceled -= OnConfirmBuild;
         controls.Player.CancelBuildingPlacement.performed -= OnCancelBuild;
         controls.Player.CancelBuildingPlacement.canceled -= OnCancelBuild;
+        controls.Player.CallCompanion.performed -= OnCallCompanion;
+        controls.Player.CallCompanion.canceled -= OnCallCompanion;
+
         controls.Disable();
     }
     #endregion
@@ -160,6 +173,12 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (context.performed)
             CancelBuildPressed = true;
+    }
+
+    public void OnCallCompanion(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            CallCompanionPressed = true;
     }
     #endregion
 }

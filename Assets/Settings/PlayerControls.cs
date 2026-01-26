@@ -208,6 +208,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CallCompanion"",
+                    ""type"": ""Button"",
+                    ""id"": ""32074c0b-414e-4cdf-aada-cba6b159a71b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -527,6 +536,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""CancelBuildingPlacement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3fd95629-d532-4745-a7bc-61e98fbea216"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""CallCompanion"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1127,6 +1147,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_RotateBuilding = m_Player.FindAction("RotateBuilding", throwIfNotFound: true);
         m_Player_ConfirmBuildingPlacement = m_Player.FindAction("ConfirmBuildingPlacement", throwIfNotFound: true);
         m_Player_CancelBuildingPlacement = m_Player.FindAction("CancelBuildingPlacement", throwIfNotFound: true);
+        m_Player_CallCompanion = m_Player.FindAction("CallCompanion", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1233,6 +1254,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_RotateBuilding;
     private readonly InputAction m_Player_ConfirmBuildingPlacement;
     private readonly InputAction m_Player_CancelBuildingPlacement;
+    private readonly InputAction m_Player_CallCompanion;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1296,6 +1318,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/CancelBuildingPlacement".
         /// </summary>
         public InputAction @CancelBuildingPlacement => m_Wrapper.m_Player_CancelBuildingPlacement;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/CallCompanion".
+        /// </summary>
+        public InputAction @CallCompanion => m_Wrapper.m_Player_CallCompanion;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1361,6 +1387,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @CancelBuildingPlacement.started += instance.OnCancelBuildingPlacement;
             @CancelBuildingPlacement.performed += instance.OnCancelBuildingPlacement;
             @CancelBuildingPlacement.canceled += instance.OnCancelBuildingPlacement;
+            @CallCompanion.started += instance.OnCallCompanion;
+            @CallCompanion.performed += instance.OnCallCompanion;
+            @CallCompanion.canceled += instance.OnCallCompanion;
         }
 
         /// <summary>
@@ -1411,6 +1440,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @CancelBuildingPlacement.started -= instance.OnCancelBuildingPlacement;
             @CancelBuildingPlacement.performed -= instance.OnCancelBuildingPlacement;
             @CancelBuildingPlacement.canceled -= instance.OnCancelBuildingPlacement;
+            @CallCompanion.started -= instance.OnCallCompanion;
+            @CallCompanion.performed -= instance.OnCallCompanion;
+            @CallCompanion.canceled -= instance.OnCallCompanion;
         }
 
         /// <summary>
@@ -1802,6 +1834,13 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCancelBuildingPlacement(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "CallCompanion" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCallCompanion(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
