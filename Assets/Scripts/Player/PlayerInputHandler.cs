@@ -16,6 +16,10 @@ public class PlayerInputHandler : MonoBehaviour
     public bool SecondaryActionInput = false;
     public bool InteractInput = false;
     public bool DropInput = false;
+    public bool ToggleBuildModeInput = false;
+    public bool RotateBuildingInput = false;
+    public bool ConfirmBuildInput = false;
+    public bool CancelBuildInput = false;
     #endregion
 
     #region Lifecycle
@@ -44,6 +48,14 @@ public class PlayerInputHandler : MonoBehaviour
         controls.Player.Interact.canceled += OnInteract;
         controls.Player.Drop.performed += OnDrop;
         controls.Player.Drop.canceled += OnDrop;
+        controls.Player.ToggleBuildMode.performed += OnToggleBuildMode;
+        controls.Player.ToggleBuildMode.canceled += OnToggleBuildMode;
+        controls.Player.RotateBuilding.performed += OnRotateBuilding;
+        controls.Player.RotateBuilding.canceled += OnRotateBuilding;
+        controls.Player.ConfirmBuildingPlacement.performed += OnConfirmBuild;
+        controls.Player.ConfirmBuildingPlacement.canceled += OnConfirmBuild;
+        controls.Player.CancelBuildingPlacement.performed += OnCancelBuild;
+        controls.Player.CancelBuildingPlacement.canceled += OnCancelBuild;
 
         controls.Enable();
     }
@@ -68,7 +80,14 @@ public class PlayerInputHandler : MonoBehaviour
         controls.Player.Interact.canceled -= OnInteract;
         controls.Player.Drop.performed -= OnDrop;
         controls.Player.Drop.canceled -= OnDrop;
-
+        controls.Player.ToggleBuildMode.performed -= OnToggleBuildMode;
+        controls.Player.ToggleBuildMode.canceled -= OnToggleBuildMode;
+        controls.Player.RotateBuilding.performed -= OnRotateBuilding;
+        controls.Player.RotateBuilding.canceled -= OnRotateBuilding;
+        controls.Player.ConfirmBuildingPlacement.performed -= OnConfirmBuild;
+        controls.Player.ConfirmBuildingPlacement.canceled -= OnConfirmBuild;
+        controls.Player.CancelBuildingPlacement.performed -= OnCancelBuild;
+        controls.Player.CancelBuildingPlacement.canceled -= OnCancelBuild;
         controls.Disable();
     }
     #endregion
@@ -117,6 +136,26 @@ public class PlayerInputHandler : MonoBehaviour
     public void OnDrop(InputAction.CallbackContext context)
     {
         DropInput = context.ReadValueAsButton();
+    }
+
+    public void OnToggleBuildMode(InputAction.CallbackContext context)
+    {
+        ToggleBuildModeInput = context.ReadValueAsButton();
+    }
+
+    public void OnRotateBuilding(InputAction.CallbackContext context)
+    {
+        RotateBuildingInput = context.ReadValueAsButton();
+    }
+
+    public void OnConfirmBuild(InputAction.CallbackContext context)
+    {
+        ConfirmBuildInput = context.ReadValueAsButton();
+    }
+
+    public void OnCancelBuild(InputAction.CallbackContext context)
+    {
+        CancelBuildInput = context.ReadValueAsButton();
     }
     #endregion
 }

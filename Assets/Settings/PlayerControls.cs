@@ -172,6 +172,42 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleBuildMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""2c06a432-b721-420e-8c89-061419fef09e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateBuilding"",
+                    ""type"": ""Button"",
+                    ""id"": ""9b8d309f-a593-42c1-8ded-f4bf8aa0c7d5"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ConfirmBuildingPlacement"",
+                    ""type"": ""Button"",
+                    ""id"": ""b9b5d9e0-8b8e-4f1f-aa62-3c930410a028"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CancelBuildingPlacement"",
+                    ""type"": ""Button"",
+                    ""id"": ""e7878d13-511d-460d-b90a-ffd7bd8d2d47"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -447,6 +483,50 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""97ce43a4-5dea-4d33-a29a-a78b45d5e255"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""ToggleBuildMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6686bf17-4f14-4c39-a45a-83e512976696"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""RotateBuilding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""68e52d66-3940-4ca8-987d-9c32fa9507fa"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""ConfirmBuildingPlacement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ff788c94-256d-45aa-9f9e-8996dd51d281"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""CancelBuildingPlacement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1043,6 +1123,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
+        m_Player_ToggleBuildMode = m_Player.FindAction("ToggleBuildMode", throwIfNotFound: true);
+        m_Player_RotateBuilding = m_Player.FindAction("RotateBuilding", throwIfNotFound: true);
+        m_Player_ConfirmBuildingPlacement = m_Player.FindAction("ConfirmBuildingPlacement", throwIfNotFound: true);
+        m_Player_CancelBuildingPlacement = m_Player.FindAction("CancelBuildingPlacement", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1145,6 +1229,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Crouch;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Sprint;
+    private readonly InputAction m_Player_ToggleBuildMode;
+    private readonly InputAction m_Player_RotateBuilding;
+    private readonly InputAction m_Player_ConfirmBuildingPlacement;
+    private readonly InputAction m_Player_CancelBuildingPlacement;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1192,6 +1280,22 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Sprint".
         /// </summary>
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/ToggleBuildMode".
+        /// </summary>
+        public InputAction @ToggleBuildMode => m_Wrapper.m_Player_ToggleBuildMode;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/RotateBuilding".
+        /// </summary>
+        public InputAction @RotateBuilding => m_Wrapper.m_Player_RotateBuilding;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/ConfirmBuildingPlacement".
+        /// </summary>
+        public InputAction @ConfirmBuildingPlacement => m_Wrapper.m_Player_ConfirmBuildingPlacement;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/CancelBuildingPlacement".
+        /// </summary>
+        public InputAction @CancelBuildingPlacement => m_Wrapper.m_Player_CancelBuildingPlacement;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1245,6 +1349,18 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
+            @ToggleBuildMode.started += instance.OnToggleBuildMode;
+            @ToggleBuildMode.performed += instance.OnToggleBuildMode;
+            @ToggleBuildMode.canceled += instance.OnToggleBuildMode;
+            @RotateBuilding.started += instance.OnRotateBuilding;
+            @RotateBuilding.performed += instance.OnRotateBuilding;
+            @RotateBuilding.canceled += instance.OnRotateBuilding;
+            @ConfirmBuildingPlacement.started += instance.OnConfirmBuildingPlacement;
+            @ConfirmBuildingPlacement.performed += instance.OnConfirmBuildingPlacement;
+            @ConfirmBuildingPlacement.canceled += instance.OnConfirmBuildingPlacement;
+            @CancelBuildingPlacement.started += instance.OnCancelBuildingPlacement;
+            @CancelBuildingPlacement.performed += instance.OnCancelBuildingPlacement;
+            @CancelBuildingPlacement.canceled += instance.OnCancelBuildingPlacement;
         }
 
         /// <summary>
@@ -1283,6 +1399,18 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
+            @ToggleBuildMode.started -= instance.OnToggleBuildMode;
+            @ToggleBuildMode.performed -= instance.OnToggleBuildMode;
+            @ToggleBuildMode.canceled -= instance.OnToggleBuildMode;
+            @RotateBuilding.started -= instance.OnRotateBuilding;
+            @RotateBuilding.performed -= instance.OnRotateBuilding;
+            @RotateBuilding.canceled -= instance.OnRotateBuilding;
+            @ConfirmBuildingPlacement.started -= instance.OnConfirmBuildingPlacement;
+            @ConfirmBuildingPlacement.performed -= instance.OnConfirmBuildingPlacement;
+            @ConfirmBuildingPlacement.canceled -= instance.OnConfirmBuildingPlacement;
+            @CancelBuildingPlacement.started -= instance.OnCancelBuildingPlacement;
+            @CancelBuildingPlacement.performed -= instance.OnCancelBuildingPlacement;
+            @CancelBuildingPlacement.canceled -= instance.OnCancelBuildingPlacement;
         }
 
         /// <summary>
@@ -1646,6 +1774,34 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSprint(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ToggleBuildMode" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnToggleBuildMode(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "RotateBuilding" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRotateBuilding(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ConfirmBuildingPlacement" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnConfirmBuildingPlacement(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "CancelBuildingPlacement" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCancelBuildingPlacement(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
