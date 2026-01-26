@@ -108,12 +108,19 @@ public class PlayerCombatManager : MonoBehaviour
     /// </summary>
     public void AnimationEvent_PerformMeleeAttack_Start()
     {
-        Debug.Log("[Combat] Attack swing started - enabling hitbox");
+        if (!isAttacking || currentWeapon == null) return;
 
-        if (currentWeapon != null)
-        {
-            currentWeapon.EnableHitbox();
-        }
+        var aimInfo = PlayerManager.Instance.AimController.CurrentAimHitInfo;
+        if (!aimInfo.HasHit) return;
+
+        // Check if within melee range
+        float meleeRange = currentWeapon.GetRange(); // e.g., 3f
+        if (aimInfo.Distance > meleeRange) return;
+
+        // Check layer mask
+        if (!IsValidHitLayer(aimInfo.HitCollider.gameObject.layer)) return;
+
+        RegisterHit(aimInfo.HitObject, aimInfo.HitPoint, aimInfo.HitNormal);
     }
 
     /// <summary>
@@ -122,14 +129,15 @@ public class PlayerCombatManager : MonoBehaviour
     /// </summary>
     public void AnimationEvent_PerformMeleeAttack_End()
     {
-        Debug.Log("[Combat] Attack swing ended - disabling hitbox");
-
-        if (currentWeapon != null)
-        {
-            currentWeapon.DisableHitbox();
-        }
-
         isAttacking = false;
+    }
+
+    private bool IsValidHitLayer(int layer)
+    {
+        if (currentWeapon == null) return false;
+
+        LayerMask hitLayers = currentWeapon.HitLayers;
+        return (hitLayers.value & (1 << layer)) != 0;
     }
 
     /// <summary>

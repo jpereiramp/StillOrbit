@@ -14,11 +14,6 @@ public class MeleeWeapon : MonoBehaviour, IUsable
     [SerializeField]
     private ItemData itemData;
 
-    [BoxGroup("Hitbox")]
-    [Tooltip("The trigger collider used to detect hits during attack swing")]
-    [SerializeField]
-    private WeaponHitbox weaponHitbox;
-
     [BoxGroup("Audio")]
     [Tooltip("Sound played when swinging the weapon (swoosh)")]
     [SerializeField]
@@ -28,21 +23,6 @@ public class MeleeWeapon : MonoBehaviour, IUsable
     [Range(0f, 1f)]
     [SerializeField]
     private float swingSFXVolume = 0.8f;
-
-    [BoxGroup("Local Fallbacks")]
-    [Tooltip("Used if ItemData doesn't provide damage values")]
-    [SerializeField]
-    private float fallbackDamage = 10f;
-
-    [BoxGroup("Local Fallbacks")]
-    [Tooltip("Used if ItemData doesn't provide attack rate")]
-    [SerializeField]
-    private float fallbackAttackRate = 1f;
-
-    [BoxGroup("Local Fallbacks")]
-    [Tooltip("Used if ItemData doesn't provide range")]
-    [SerializeField]
-    private float fallbackRange = 2f;
 
     [BoxGroup("Events")]
     [SerializeField]
@@ -56,22 +36,12 @@ public class MeleeWeapon : MonoBehaviour, IUsable
     [ShowInInspector, ReadOnly]
     private float lastAttackTime;
 
+    [BoxGroup("Hit Detection")]
+    [SerializeField]
+    private LayerMask hitLayers;
+
+    public LayerMask HitLayers => hitLayers;
     public bool CanUse => Time.time >= lastAttackTime + GetCooldown();
-
-    private void Awake()
-    {
-        // Try to find hitbox if not assigned
-        if (weaponHitbox == null)
-        {
-            weaponHitbox = GetComponentInChildren<WeaponHitbox>();
-        }
-
-        // Ensure hitbox starts disabled
-        if (weaponHitbox != null)
-        {
-            weaponHitbox.SetActive(false);
-        }
-    }
 
     public UseResult Use(GameObject user)
     {
@@ -108,34 +78,6 @@ public class MeleeWeapon : MonoBehaviour, IUsable
     }
 
     /// <summary>
-    /// Enables the weapon hitbox for hit detection. Called by PlayerCombatManager during attack animation.
-    /// </summary>
-    public void EnableHitbox()
-    {
-        if (weaponHitbox != null)
-        {
-            weaponHitbox.SetActive(true);
-            Debug.Log("[MeleeWeapon] Hitbox enabled");
-        }
-        else
-        {
-            Debug.LogWarning("[MeleeWeapon] No WeaponHitbox assigned");
-        }
-    }
-
-    /// <summary>
-    /// Disables the weapon hitbox. Called by PlayerCombatManager when attack animation ends.
-    /// </summary>
-    public void DisableHitbox()
-    {
-        if (weaponHitbox != null)
-        {
-            weaponHitbox.SetActive(false);
-            Debug.Log("[MeleeWeapon] Hitbox disabled");
-        }
-    }
-
-    /// <summary>
     /// Called when the weapon hits something. Invokes the onHit event.
     /// </summary>
     public void NotifyHit()
@@ -158,7 +100,7 @@ public class MeleeWeapon : MonoBehaviour, IUsable
             return toolData.GetDamage(targetType);
         }
 
-        return fallbackDamage;
+        return 0f;
     }
 
     /// <summary>
@@ -176,12 +118,12 @@ public class MeleeWeapon : MonoBehaviour, IUsable
             return toolData.Range;
         }
 
-        return fallbackRange;
+        return 0f;
     }
 
     private float GetCooldown()
     {
-        float rate = fallbackAttackRate;
+        float rate = 1f;
 
         if (itemData is WeaponData weaponData && weaponData.AttackRate > 0)
         {

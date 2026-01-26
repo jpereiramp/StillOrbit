@@ -394,7 +394,7 @@ MonoBehaviour:
   maxAimDistance: 100
   aimLayerMask:
     serializedVersion: 2
-    m_Bits: 1216
+    m_Bits: 1217
 --- !u!114 &6437506023504243459
 MonoBehaviour:
   m_ObjectHideFlags: 0
