@@ -76,9 +76,10 @@ public class BuildMenuUI : MonoBehaviour
             if (buildingData == null) continue;
 
             BuildingSlotUI newSlot = Instantiate(slotPrefab, slotsContainer);
+            bool canAfford = buildModeController.CanAffordBuilding(buildingData);
+
             newSlot.Setup(buildingData, HandleSlotClicked);
-            // TODO: Update affordability based on player resources
-            newSlot.UpdateAffordability(true);
+            newSlot.UpdateAffordability(canAfford);
 
             activeSlots.Add(newSlot);
         }

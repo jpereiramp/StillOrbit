@@ -14,6 +14,9 @@ public class PlayerResourceInventory : MonoBehaviour, IResourceHolder
     [SerializeField]
     private ResourceInventory inventory = new ResourceInventory();
 
+    // Public Accessors
+    public ResourceInventory Inventory => inventory;
+
     /// <summary>
     /// Fired when any resource amount changes.
     /// </summary>

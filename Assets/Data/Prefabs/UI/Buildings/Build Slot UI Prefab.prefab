@@ -465,7 +465,7 @@ MonoBehaviour:
   button: {fileID: 8019445280416700072}
   backgroundImage: {fileID: 3986842972523992600}
   affordableColor: {r: 1, g: 1, b: 1, a: 1}
-  unaffordableColor: {r: 0.6603774, g: 0.6603774, b: 0.6603774, a: 1}
+  unaffordableColor: {r: 0.8627452, g: 0.1921569, b: 0.1960784, a: 1}
   buildingData: {fileID: 0}
 --- !u!1 &7471361555317517272
 GameObject:

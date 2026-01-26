@@ -64,6 +64,7 @@ public class BuildingSlotUI : MonoBehaviour
         if (nameText != null)
         {
             nameText.color = canAfford ? Color.black : Color.lightGray;
+            nameText.text = buildingData.BuildingName + (canAfford ? "" : " (Insufficient Funds)");
         }
 
         button.interactable = canAfford;

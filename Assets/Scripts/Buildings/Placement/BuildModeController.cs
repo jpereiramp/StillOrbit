@@ -161,4 +161,49 @@ public class BuildModeController : MonoBehaviour
         }
     }
     #endregion
+
+    #region Cost Calculation
+    public bool CanAffordBuilding(BuildingData buildingData)
+    {
+        if (buildingData == null) return false;
+
+        ResourceInventory playerInventory = playerManager.ResourceInventory.Inventory;
+        foreach (var cost in buildingData.ConstructionCosts)
+        {
+            int playerAmount = playerInventory.Get(cost.resourceType);
+            if (playerAmount < cost.amount)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private bool TryDeductBuildingCosts(BuildingData buildingData)
+    {
+        if (buildingData == null) return false;
+
+        ResourceInventory playerInventory = playerManager.ResourceInventory.Inventory;
+
+        // First check if we can afford
+        bool canAfford = CanAffordBuilding(buildingData);
+        if (!canAfford)
+        {
+            return false;
+        }
+
+        // Deduct costs
+        foreach (var cost in buildingData.ConstructionCosts)
+        {
+            bool success = playerInventory.TryRemove(cost.resourceType, cost.amount);
+            if (!success)
+            {
+                Debug.LogError("Unexpected failure to deduct resources after affordability check.");
+                return false;
+            }
+        }
+
+        return true;
+    }
+    #endregion
 }
