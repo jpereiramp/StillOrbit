@@ -23,6 +23,10 @@ public class CompanionCoreController : MonoBehaviour
     [Required]
     [SerializeField] private CompanionInventory inventory;
 
+    [BoxGroup("References")]
+    [Required]
+    [SerializeField] private CompanionMovementController movementController;
+
     [BoxGroup("State")]
     [ShowInInspector, ReadOnly]
     private bool isActive = true;
@@ -52,6 +56,7 @@ public class CompanionCoreController : MonoBehaviour
     public NavMeshAgent NavAgent => navAgent;
     public Vector3 Position => transform.position;
     public CompanionInventory Inventory => inventory;
+    public CompanionMovementController MovementController => movementController;
     public CompanionState CurrentState => currentState;
     public CompanionState PreviousState => previousState;
 
@@ -217,7 +222,7 @@ public class CompanionCoreController : MonoBehaviour
         return GetDistanceToPlayer() <= companionData.InteractionRange;
     }
 
-    private void StopNavigation()
+    public void StopNavigation()
     {
         if (navAgent != null && navAgent.isOnNavMesh)
         {
@@ -333,12 +338,12 @@ public class CompanionCoreController : MonoBehaviour
         switch (state)
         {
             case CompanionState.Inactive:
-                // Handled by Deactivate()
+                movementController.Stop();
                 break;
 
             case CompanionState.Idle:
                 // Stop movement
-                StopNavigation();
+                movementController.Stop();
                 break;
 
             case CompanionState.BeingCalled:
@@ -346,7 +351,7 @@ public class CompanionCoreController : MonoBehaviour
                 break;
 
             case CompanionState.FollowingPlayer:
-                // Will start following in Update
+                movementController.StartFollowingPlayer();
                 break;
 
             case CompanionState.MovingToDepot:
@@ -355,11 +360,14 @@ public class CompanionCoreController : MonoBehaviour
 
             case CompanionState.Depositing:
                 // Will handle in depositing logic
-                StopNavigation();
+                movementController.Stop();
                 break;
 
             case CompanionState.ReturningToPlayer:
-                // Will set destination to player
+                if (targetPlayerTransform != null)
+                {
+                    movementController.SetDestination(targetPlayerTransform.position);
+                }
                 break;
         }
     }
