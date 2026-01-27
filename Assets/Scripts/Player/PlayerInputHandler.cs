@@ -26,6 +26,16 @@ public class PlayerInputHandler : MonoBehaviour
     public bool ConfirmBuildPressed = false;
     public bool CancelBuildPressed = false;
 
+    // Inventory
+    public bool ToggleInventoryPressed = false;
+
+    // Quick Slots
+    public bool QuickSlot1Pressed = false;
+    public bool QuickSlot2Pressed = false;
+    public bool QuickSlot3Pressed = false;
+    public bool QuickSlot4Pressed = false;
+    public bool QuickSlot5Pressed = false;
+
     // Companion
     public bool CallCompanionPressed = false;
     #endregion
@@ -38,6 +48,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void OnEnable()
     {
+        // Movement
         controls.Player.Move.performed += OnMove;
         controls.Player.Move.canceled += OnMove;
         controls.Player.Look.performed += OnLook;
@@ -48,6 +59,8 @@ public class PlayerInputHandler : MonoBehaviour
         controls.Player.Sprint.canceled += OnSprint;
         controls.Player.Crouch.performed += OnCrouch;
         controls.Player.Crouch.canceled += OnCrouch;
+
+        // Actions
         controls.Player.PrimaryAction.performed += OnPrimaryAction;
         controls.Player.PrimaryAction.canceled += OnPrimaryAction;
         controls.Player.SecondaryAction.performed += OnSecondaryAction;
@@ -56,6 +69,8 @@ public class PlayerInputHandler : MonoBehaviour
         controls.Player.Interact.canceled += OnInteract;
         controls.Player.Drop.performed += OnDrop;
         controls.Player.Drop.canceled += OnDrop;
+
+        // Build
         controls.Player.ToggleBuildMode.performed += OnToggleBuildMode;
         controls.Player.ToggleBuildMode.canceled += OnToggleBuildMode;
         controls.Player.RotateBuilding.performed += OnRotateBuilding;
@@ -64,6 +79,24 @@ public class PlayerInputHandler : MonoBehaviour
         controls.Player.ConfirmBuildingPlacement.canceled += OnConfirmBuild;
         controls.Player.CancelBuildingPlacement.performed += OnCancelBuild;
         controls.Player.CancelBuildingPlacement.canceled += OnCancelBuild;
+
+        // Inventory
+        controls.Player.ToggleInventory.performed += OnToggleInventory;
+        controls.Player.ToggleInventory.canceled += OnToggleInventory;
+
+        // Quick Slot
+        controls.Player.QuickSlot1.performed += context => OnQuickSlotSelect(context, 1);
+        controls.Player.QuickSlot1.canceled += context => OnQuickSlotSelect(context, 1);
+        controls.Player.QuickSlot2.performed += context => OnQuickSlotSelect(context, 2);
+        controls.Player.QuickSlot2.canceled += context => OnQuickSlotSelect(context, 2);
+        controls.Player.QuickSlot3.performed += context => OnQuickSlotSelect(context, 3);
+        controls.Player.QuickSlot3.canceled += context => OnQuickSlotSelect(context, 3);
+        controls.Player.QuickSlot4.performed += context => OnQuickSlotSelect(context, 4);
+        controls.Player.QuickSlot4.canceled += context => OnQuickSlotSelect(context, 4);
+        controls.Player.QuickSlot5.performed += context => OnQuickSlotSelect(context, 5);
+        controls.Player.QuickSlot5.canceled += context => OnQuickSlotSelect(context, 5);
+
+        // Companion
         controls.Player.CallCompanion.performed += OnCallCompanion;
         controls.Player.CallCompanion.canceled += OnCallCompanion;
 
@@ -72,6 +105,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void OnDisable()
     {
+        // Movement
         controls.Player.Move.performed -= OnMove;
         controls.Player.Move.canceled -= OnMove;
         controls.Player.Look.performed -= OnLook;
@@ -82,6 +116,8 @@ public class PlayerInputHandler : MonoBehaviour
         controls.Player.Sprint.canceled -= OnSprint;
         controls.Player.Crouch.performed -= OnCrouch;
         controls.Player.Crouch.canceled -= OnCrouch;
+
+        // Actions
         controls.Player.PrimaryAction.performed -= OnPrimaryAction;
         controls.Player.PrimaryAction.canceled -= OnPrimaryAction;
         controls.Player.SecondaryAction.performed -= OnSecondaryAction;
@@ -90,6 +126,8 @@ public class PlayerInputHandler : MonoBehaviour
         controls.Player.Interact.canceled -= OnInteract;
         controls.Player.Drop.performed -= OnDrop;
         controls.Player.Drop.canceled -= OnDrop;
+
+        // Building
         controls.Player.ToggleBuildMode.performed -= OnToggleBuildMode;
         controls.Player.ToggleBuildMode.canceled -= OnToggleBuildMode;
         controls.Player.RotateBuilding.performed -= OnRotateBuilding;
@@ -98,6 +136,24 @@ public class PlayerInputHandler : MonoBehaviour
         controls.Player.ConfirmBuildingPlacement.canceled -= OnConfirmBuild;
         controls.Player.CancelBuildingPlacement.performed -= OnCancelBuild;
         controls.Player.CancelBuildingPlacement.canceled -= OnCancelBuild;
+
+        // Inventory
+        controls.Player.ToggleInventory.performed -= OnToggleInventory;
+        controls.Player.ToggleInventory.canceled -= OnToggleInventory;
+
+        // Quick Slot
+        controls.Player.QuickSlot1.performed -= context => OnQuickSlotSelect(context, 1);
+        controls.Player.QuickSlot1.canceled -= context => OnQuickSlotSelect(context, 1);
+        controls.Player.QuickSlot2.performed -= context => OnQuickSlotSelect(context, 2);
+        controls.Player.QuickSlot2.canceled -= context => OnQuickSlotSelect(context, 2);
+        controls.Player.QuickSlot3.performed -= context => OnQuickSlotSelect(context, 3);
+        controls.Player.QuickSlot3.canceled -= context => OnQuickSlotSelect(context, 3);
+        controls.Player.QuickSlot4.performed -= context => OnQuickSlotSelect(context, 4);
+        controls.Player.QuickSlot4.canceled -= context => OnQuickSlotSelect(context, 4);
+        controls.Player.QuickSlot5.performed -= context => OnQuickSlotSelect(context, 5);
+        controls.Player.QuickSlot5.canceled -= context => OnQuickSlotSelect(context, 5);
+
+        // Companion
         controls.Player.CallCompanion.performed -= OnCallCompanion;
         controls.Player.CallCompanion.canceled -= OnCallCompanion;
 
@@ -179,6 +235,37 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (context.performed)
             CallCompanionPressed = true;
+    }
+
+    public void OnToggleInventory(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            ToggleInventoryPressed = true;
+    }
+
+    public void OnQuickSlotSelect(InputAction.CallbackContext context, int slotIndex)
+    {
+        if (context.performed)
+        {
+            switch (slotIndex)
+            {
+                case 1:
+                    QuickSlot1Pressed = true;
+                    break;
+                case 2:
+                    QuickSlot2Pressed = true;
+                    break;
+                case 3:
+                    QuickSlot3Pressed = true;
+                    break;
+                case 4:
+                    QuickSlot4Pressed = true;
+                    break;
+                case 5:
+                    QuickSlot5Pressed = true;
+                    break;
+            }
+        }
     }
     #endregion
 }
