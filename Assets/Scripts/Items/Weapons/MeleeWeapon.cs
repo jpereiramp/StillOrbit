@@ -7,7 +7,7 @@ using UnityEngine.Events;
 /// Handles attack cooldown and delegates hit detection to PlayerCombatManager.
 /// Attach to the held prefab, not the world prefab.
 /// </summary>
-public class MeleeWeapon : MonoBehaviour, IUsable
+public class MeleeWeapon : MonoBehaviour, IUsable, IWeapon
 {
     [BoxGroup("Data")]
     [Tooltip("Link to WeaponData or ToolData for stats. Required.")]
@@ -42,6 +42,7 @@ public class MeleeWeapon : MonoBehaviour, IUsable
 
     public LayerMask HitLayers => hitLayers;
     public bool CanUse => Time.time >= lastAttackTime + GetCooldown();
+    public WeaponData WeaponData => itemData as WeaponData;
 
     public UseResult Use(GameObject user)
     {
