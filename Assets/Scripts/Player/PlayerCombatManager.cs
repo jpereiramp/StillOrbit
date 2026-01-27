@@ -18,10 +18,6 @@ public class PlayerCombatManager : MonoBehaviour
     [SerializeField]
     private string meleeAttackTrigger = "MeleeAttack";
 
-    [FoldoutGroup("Fallback Hit Effects")]
-    [SerializeField]
-    private float fallbackVFXLifetime = 2f;
-
     [BoxGroup("Debug")]
     [ShowInInspector, ReadOnly]
     private bool isAttacking;

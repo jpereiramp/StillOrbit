@@ -80,17 +80,17 @@ public class PlayerInputHandler : MonoBehaviour
         controls.Player.ToggleInventory.performed += OnToggleInventory;
         controls.Player.ToggleInventory.canceled += OnToggleInventory;
 
-        // Quick Slot
-        controls.Player.QuickSlot1.performed += context => OnQuickSlotSelect(context, 1);
-        controls.Player.QuickSlot1.canceled += context => OnQuickSlotSelect(context, 1);
-        controls.Player.QuickSlot2.performed += context => OnQuickSlotSelect(context, 2);
-        controls.Player.QuickSlot2.canceled += context => OnQuickSlotSelect(context, 2);
-        controls.Player.QuickSlot3.performed += context => OnQuickSlotSelect(context, 3);
-        controls.Player.QuickSlot3.canceled += context => OnQuickSlotSelect(context, 3);
-        controls.Player.QuickSlot4.performed += context => OnQuickSlotSelect(context, 4);
-        controls.Player.QuickSlot4.canceled += context => OnQuickSlotSelect(context, 4);
-        controls.Player.QuickSlot5.performed += context => OnQuickSlotSelect(context, 5);
-        controls.Player.QuickSlot5.canceled += context => OnQuickSlotSelect(context, 5);
+        // Quick Slot (0-indexed: slot 1 = index 0, slot 5 = index 4)
+        controls.Player.QuickSlot1.performed += context => OnQuickSlotSelect(context, 0);
+        controls.Player.QuickSlot1.canceled += context => OnQuickSlotSelect(context, 0);
+        controls.Player.QuickSlot2.performed += context => OnQuickSlotSelect(context, 1);
+        controls.Player.QuickSlot2.canceled += context => OnQuickSlotSelect(context, 1);
+        controls.Player.QuickSlot3.performed += context => OnQuickSlotSelect(context, 2);
+        controls.Player.QuickSlot3.canceled += context => OnQuickSlotSelect(context, 2);
+        controls.Player.QuickSlot4.performed += context => OnQuickSlotSelect(context, 3);
+        controls.Player.QuickSlot4.canceled += context => OnQuickSlotSelect(context, 3);
+        controls.Player.QuickSlot5.performed += context => OnQuickSlotSelect(context, 4);
+        controls.Player.QuickSlot5.canceled += context => OnQuickSlotSelect(context, 4);
 
         // Companion
         controls.Player.CallCompanion.performed += OnCallCompanion;
@@ -137,17 +137,17 @@ public class PlayerInputHandler : MonoBehaviour
         controls.Player.ToggleInventory.performed -= OnToggleInventory;
         controls.Player.ToggleInventory.canceled -= OnToggleInventory;
 
-        // Quick Slot
-        controls.Player.QuickSlot1.performed -= context => OnQuickSlotSelect(context, 1);
-        controls.Player.QuickSlot1.canceled -= context => OnQuickSlotSelect(context, 1);
-        controls.Player.QuickSlot2.performed -= context => OnQuickSlotSelect(context, 2);
-        controls.Player.QuickSlot2.canceled -= context => OnQuickSlotSelect(context, 2);
-        controls.Player.QuickSlot3.performed -= context => OnQuickSlotSelect(context, 3);
-        controls.Player.QuickSlot3.canceled -= context => OnQuickSlotSelect(context, 3);
-        controls.Player.QuickSlot4.performed -= context => OnQuickSlotSelect(context, 4);
-        controls.Player.QuickSlot4.canceled -= context => OnQuickSlotSelect(context, 4);
-        controls.Player.QuickSlot5.performed -= context => OnQuickSlotSelect(context, 5);
-        controls.Player.QuickSlot5.canceled -= context => OnQuickSlotSelect(context, 5);
+        // Quick Slot (0-indexed: slot 1 = index 0, slot 5 = index 4)
+        controls.Player.QuickSlot1.performed -= context => OnQuickSlotSelect(context, 0);
+        controls.Player.QuickSlot1.canceled -= context => OnQuickSlotSelect(context, 0);
+        controls.Player.QuickSlot2.performed -= context => OnQuickSlotSelect(context, 1);
+        controls.Player.QuickSlot2.canceled -= context => OnQuickSlotSelect(context, 1);
+        controls.Player.QuickSlot3.performed -= context => OnQuickSlotSelect(context, 2);
+        controls.Player.QuickSlot3.canceled -= context => OnQuickSlotSelect(context, 2);
+        controls.Player.QuickSlot4.performed -= context => OnQuickSlotSelect(context, 3);
+        controls.Player.QuickSlot4.canceled -= context => OnQuickSlotSelect(context, 3);
+        controls.Player.QuickSlot5.performed -= context => OnQuickSlotSelect(context, 4);
+        controls.Player.QuickSlot5.canceled -= context => OnQuickSlotSelect(context, 4);
 
         // Companion
         controls.Player.CallCompanion.performed -= OnCallCompanion;

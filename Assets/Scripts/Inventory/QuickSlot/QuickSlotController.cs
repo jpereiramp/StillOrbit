@@ -1,5 +1,4 @@
 using System;
-using NUnit.Framework;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -159,8 +158,11 @@ public class QuickSlotController : MonoBehaviour
     /// <param name="quickSlotIndex">Index of the quick slot to select</param>
     public void SelectQuickSlot(int quickSlotIndex)
     {
+        Debug.Log($"[QuickSlot] SelectQuickSlot called with index: {quickSlotIndex}");
+
         if (!IsValidQuickSlotIndex(quickSlotIndex))
         {
+            Debug.LogWarning($"[QuickSlot] Invalid quick slot index: {quickSlotIndex}");
             return; // Invalid index
         }
 
@@ -169,20 +171,29 @@ public class QuickSlotController : MonoBehaviour
         // If selecting same slot, ignore
         if (activeQuickSlotIndex == quickSlotIndex)
         {
+            Debug.Log($"[QuickSlot] Same slot selected, ignoring");
             return;
         }
 
         // Select new slot
         activeQuickSlotIndex = quickSlotIndex;
+        Debug.Log($"[QuickSlot] Active slot changed from {previousIndex} to {activeQuickSlotIndex}");
 
         // Equip item in this slot
+        int inventoryIndex = quickSlots[quickSlotIndex];
+        Debug.Log($"[QuickSlot] Inventory slot index for quick slot {quickSlotIndex}: {inventoryIndex}");
+
         ItemData itemData = GetQuickSlotItem(quickSlotIndex);
+        Debug.Log($"[QuickSlot] ItemData for quick slot {quickSlotIndex}: {(itemData != null ? itemData.ItemName : "NULL")}");
+
         if (itemData != null && itemData.CanEquip)
         {
+            Debug.Log($"[QuickSlot] Calling EquipItem for: {itemData.ItemName}");
             equipmentController.EquipItem(itemData);
         }
         else // Empty slot selected -- unequip current item
         {
+            Debug.Log($"[QuickSlot] Empty slot or non-equippable, unequipping current item");
             equipmentController.UnequipItem();
         }
 
@@ -278,5 +289,19 @@ public class QuickSlotController : MonoBehaviour
     private bool IsValidQuickSlotIndex(int index)
     {
         return index > EmptySlotIndex && index < QuickSlotCount;
+    }
+
+    /// <summary>
+    /// Sets the active quick slot index without equipping the item.
+    /// Use when the item is already equipped via another mechanism (e.g., pickup auto-equip).
+    /// </summary>
+    public void SetActiveSlotIndex(int quickSlotIndex)
+    {
+        if (!IsValidQuickSlotIndex(quickSlotIndex)) return;
+        if (activeQuickSlotIndex == quickSlotIndex) return;
+
+        int previousIndex = activeQuickSlotIndex;
+        activeQuickSlotIndex = quickSlotIndex;
+        OnActiveSlotChanged?.Invoke(previousIndex, activeQuickSlotIndex);
     }
 }

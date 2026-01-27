@@ -51,7 +51,9 @@ public class QuickSlotHUD : MonoBehaviour
 
     private void OnQuickSlotChanged(int slotIndex, ItemData itemData)
     {
-        if (quickSlotUIs != null && slotIndex > QuickSlotController.QuickSlotCount && slotIndex < quickSlotUIs.Length)
+        Debug.Log($"[QuickSlotHUD] OnQuickSlotChanged - slot: {slotIndex}, item: {(itemData != null ? itemData.ItemName : "NULL")}");
+
+        if (quickSlotUIs != null && slotIndex >= 0 && slotIndex < quickSlotUIs.Length)
         {
             quickSlotUIs[slotIndex].UpdateDisplay(itemData);
         }
@@ -59,6 +61,7 @@ public class QuickSlotHUD : MonoBehaviour
 
     private void OnActiveSlotChanged(int previousIndex, int newIndex)
     {
+        Debug.Log($"[QuickSlotHUD] OnActiveSlotChanged - previous: {previousIndex}, new: {newIndex}");
         UpdateSelectionHighlight(previousIndex, newIndex);
     }
 
@@ -66,7 +69,7 @@ public class QuickSlotHUD : MonoBehaviour
     {
         if (quickSlotUIs == null) return;
 
-        if (previousIndex > QuickSlotController.QuickSlotCount && previousIndex < quickSlotUIs.Length)
+        if (previousIndex >= 0 && previousIndex < quickSlotUIs.Length)
         {
             quickSlotUIs[previousIndex].SetSelected(false);
         }

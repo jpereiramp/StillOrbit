@@ -15,12 +15,6 @@ public class BuildingGhostController : MonoBehaviour
     [BoxGroup("Settings")]
     [SerializeField] private float rotationStep = 15f;
 
-    [BoxGroup("Settings")]
-    [SerializeField] private LayerMask groundLayerMask;
-
-    [BoxGroup("Settings")]
-    [SerializeField] private float maxRaycastDistance = 200f;
-
     [BoxGroup("State")]
     [ShowInInspector, ReadOnly]
     private GameObject currentGhost;

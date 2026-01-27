@@ -187,7 +187,18 @@ public class PlayerInteractionController : MonoBehaviour
             {
                 bool added = inventory.TryAddItem(pickedItemData, quantity);
                 if (added)
-                    quickSlotController.TryAutoAssign(inventory.FindItem(itemData));
+                {
+                    int inventoryIndex = inventory.FindItem(pickedItemData);
+                    if (quickSlotController.TryAutoAssign(inventoryIndex))
+                    {
+                        // Mark this quick slot as active since we just equipped the item
+                        int quickSlotIndex = quickSlotController.FindQuickSlotForInventorySlot(inventoryIndex);
+                        if (quickSlotIndex >= 0)
+                        {
+                            quickSlotController.SetActiveSlotIndex(quickSlotIndex);
+                        }
+                    }
+                }
             }
         }
         else
@@ -195,8 +206,18 @@ public class PlayerInteractionController : MonoBehaviour
             // Just add to inventory with quantity
             if (inventory != null)
             {
-                inventory.TryAddItem(pickedItemData, quantity);
-                Debug.Log($"[Pickup] Added {quantity}x to inventory only");
+                bool added = inventory.TryAddItem(pickedItemData, quantity);
+                if (added)
+                {
+                    Debug.Log($"[Pickup] Added {quantity}x to inventory only");
+
+                    // Auto-assign equippable items to quick slots even when not equipping
+                    if (pickedItemData.CanEquip)
+                    {
+                        int inventoryIndex = inventory.FindItem(pickedItemData);
+                        quickSlotController.TryAutoAssign(inventoryIndex);
+                    }
+                }
             }
         }
     }
