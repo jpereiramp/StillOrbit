@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c185af117d6abc9419e1ea750720b195
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 166196
+  packageName: CB Sci-Fi Pack
+  packageVersion: 1.1
+  assetPath: Assets/ThirdParty/Cuboom/CB Sci-Fi Pack/Materials/M_Emissive_Red.mat
+  uploadId: 0

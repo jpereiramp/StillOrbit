@@ -34,7 +34,6 @@ public class PlayerInteractionController : MonoBehaviour
 
     // Edge detection for inputs (prevent held button = repeated actions)
     private bool previousInteractInput;
-    private bool previousPrimaryActionInput;
     private bool previousDropInput;
 
     private void Awake()
@@ -57,9 +56,8 @@ public class PlayerInteractionController : MonoBehaviour
             HandleInteraction();
         }
 
-        // Primary action input - rising edge only
-        bool primaryActionPressed = inputHandler.PrimaryActionInput && !previousPrimaryActionInput;
-        if (primaryActionPressed)
+        // Primary action input - allow continuous use while held (weapon cooldowns handle rate limiting)
+        if (inputHandler.PrimaryActionInput)
         {
             HandlePrimaryAction();
         }
@@ -73,7 +71,6 @@ public class PlayerInteractionController : MonoBehaviour
 
         // Update previous states for edge detection
         previousInteractInput = inputHandler.InteractInput;
-        previousPrimaryActionInput = inputHandler.PrimaryActionInput;
         previousDropInput = inputHandler.DropInput;
     }
 

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: a935cd79f85048d43a0bab23d706bd9d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 274675
+  packageName: Ultimate SoundFX
+  packageVersion: 1.1
+  assetPath: Assets/ArtDesireBoutique/Scripts/Track.cs
+  uploadId: 0

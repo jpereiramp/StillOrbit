@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 2dc05823453a1374da5366de267bb792
+ShaderIncludeImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 316173
+  packageName: All In 1 3D-Shader
+  packageVersion: 2.63
+  assetPath: Assets/ThirdParty/Plugins/AllIn13DShader/Shaders/ShaderLibrary/AllIn13DShaderCore.hlsl
+  uploadId: 853196

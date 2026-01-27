@@ -17,3 +17,10 @@ TrueTypeFontImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 274675
+  packageName: Ultimate SoundFX
+  packageVersion: 1.1
+  assetPath: Assets/ThirdParty/TextMesh Pro/Fonts/LiberationSans.ttf
+  uploadId: 0

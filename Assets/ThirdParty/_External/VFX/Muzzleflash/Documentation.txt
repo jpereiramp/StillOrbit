@@ -1,0 +1,8 @@
+1. Place the "Shooter" script on the map.
+2. Place the effect on the map.
+3. Create additional positions in the script.
+4. Add your effects to the script.
+
+
+You can find example effects on the "Demo map"
+An example usage with the script can be found on "Demo map 2" 

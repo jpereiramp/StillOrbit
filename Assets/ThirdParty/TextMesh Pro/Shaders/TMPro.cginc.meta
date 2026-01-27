@@ -7,3 +7,10 @@ ShaderImporter:
   userData: Version 2.0
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 274675
+  packageName: Ultimate SoundFX
+  packageVersion: 1.1
+  assetPath: Assets/ThirdParty/TextMesh Pro/Shaders/TMPro.cginc
+  uploadId: 0
