@@ -24,6 +24,9 @@ public class PlayerInteractionController : MonoBehaviour
     [SerializeField]
     private PlayerInventory inventory;
 
+    [BoxGroup("References")]
+    [SerializeField] private QuickSlotController quickSlotController;
+
     [BoxGroup("Settings")]
     [SerializeField]
     private float interactionRange = 3f;
@@ -182,7 +185,9 @@ public class PlayerInteractionController : MonoBehaviour
             // Also add to inventory with quantity (we're holding it, but it's "in" our inventory)
             if (inventory != null)
             {
-                inventory.TryAddItem(pickedItemData, quantity);
+                bool added = inventory.TryAddItem(pickedItemData, quantity);
+                if (added)
+                    quickSlotController.TryAutoAssign(inventory.FindItem(itemData));
             }
         }
         else

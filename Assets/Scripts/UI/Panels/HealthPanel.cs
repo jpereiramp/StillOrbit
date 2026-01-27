@@ -9,6 +9,8 @@ public class HealthPanel : UIPanel
 {
     [Header("References")]
     [SerializeField] private Slider healthSlider;
+
+    [Tooltip("(Optional) Text displaying current and max health in format 'current / max'")]
     [SerializeField] private TextMeshProUGUI healthText;
 
     private HealthComponent healthComponent;

@@ -30,11 +30,7 @@ public class PlayerInputHandler : MonoBehaviour
     public bool ToggleInventoryPressed = false;
 
     // Quick Slots
-    public bool QuickSlot1Pressed = false;
-    public bool QuickSlot2Pressed = false;
-    public bool QuickSlot3Pressed = false;
-    public bool QuickSlot4Pressed = false;
-    public bool QuickSlot5Pressed = false;
+    public int QuickSlotPressed = QuickSlotController.EmptySlotIndex;
 
     // Companion
     public bool CallCompanionPressed = false;
@@ -246,26 +242,7 @@ public class PlayerInputHandler : MonoBehaviour
     public void OnQuickSlotSelect(InputAction.CallbackContext context, int slotIndex)
     {
         if (context.performed)
-        {
-            switch (slotIndex)
-            {
-                case 1:
-                    QuickSlot1Pressed = true;
-                    break;
-                case 2:
-                    QuickSlot2Pressed = true;
-                    break;
-                case 3:
-                    QuickSlot3Pressed = true;
-                    break;
-                case 4:
-                    QuickSlot4Pressed = true;
-                    break;
-                case 5:
-                    QuickSlot5Pressed = true;
-                    break;
-            }
-        }
+            QuickSlotPressed = slotIndex;
     }
     #endregion
 }
