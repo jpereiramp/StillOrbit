@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6439154745754229257}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: CameraTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 449697601664466325}
   - component: {fileID: 4906530820480302356}
   - component: {fileID: 7008156067860907000}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Player Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64,6 +64,7 @@ Transform:
   m_Children:
   - {fileID: 6854677833654283251}
   - {fileID: 1078615359468114011}
+  - {fileID: 7435565209725510831}
   m_Father: {fileID: 7392240281951479410}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4906530820480302356
@@ -122,6 +123,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &3682945505263944019
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7435565209725510831}
+  m_Layer: 15
+  m_Name: Foot Position
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7435565209725510831
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3682945505263944019}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 449697601664466325}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4291722035117816937
 GameObject:
   m_ObjectHideFlags: 0
@@ -146,7 +178,12 @@ GameObject:
   - component: {fileID: 8451708890068511748}
   - component: {fileID: 3965061983001386789}
   - component: {fileID: 743974934871732703}
-  m_Layer: 0
+  - component: {fileID: 4604252179458506422}
+  - component: {fileID: 474030073451415629}
+  - component: {fileID: 4198458449525073542}
+  - component: {fileID: 7870453715122650052}
+  - component: {fileID: 8439617780837365719}
+  m_Layer: 15
   m_Name: Player Character Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -369,6 +406,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerLocomotionController
   Motor: {fileID: 414380330849343048}
+  footstepEmitter: {fileID: 0}
   MaxStableMoveSpeed: 10
   StableMovementSharpness: 15
   OrientationSharpness: 10
@@ -404,7 +442,7 @@ MonoBehaviour:
   maxAimDistance: 100
   aimLayerMask:
     serializedVersion: 2
-    m_Bits: 1049793
+    m_Bits: 1180865
   minAimAssistRadius: 0.05
   maxAimAssistRadius: 0.4
   maxAimAssistAngle: 6
@@ -424,7 +462,7 @@ MonoBehaviour:
   aimController: {fileID: 4527346682214563505}
   equipmentController: {fileID: 5583483807435740413}
   inventory: {fileID: -461703376959736553}
-  quickSlotController: {fileID: 0}
+  quickSlotController: {fileID: 474030073451415629}
   interactionRange: 3
 --- !u!114 &5583483807435740413
 MonoBehaviour:
@@ -480,7 +518,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2df8bbb5ca5ad441a2cd1405187bc88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombatManager
-  playerManager: {fileID: 0}
+  playerManager: {fileID: 7350867502634692673}
   meleeAttackTrigger: MeleeAttack
 --- !u!114 &743974934871732703
 MonoBehaviour:
@@ -499,6 +537,88 @@ MonoBehaviour:
   currentHealth: 0
   isInvulnerable: 0
   damageType: 3
+--- !u!114 &4604252179458506422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4291722035117816937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96eb51681464c93409155f8734a35096, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerPerceivable
+  perceptionPoint: {fileID: 449697601664466325}
+  baseNoiseLevel: 0.5
+--- !u!114 &474030073451415629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4291722035117816937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d2966e4d6cf5e340b94b86b59240c96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuickSlotController
+  playerInventory: {fileID: -461703376959736553}
+  equipmentController: {fileID: 5583483807435740413}
+  inputHandler: {fileID: 4324103023094236716}
+--- !u!114 &4198458449525073542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4291722035117816937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5eefb2f499ecdff47ae3c703cc4ebbab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HitEffectReceiver
+  hitSound: {fileID: 8300000, guid: 70f59ed43022d6a45b588c89b3508f1b, type: 3}
+  hitSoundVolume: 1
+  hitVFXPrefab: {fileID: 0}
+  vfxLifetime: 2
+  vignetteHitEffect: {fileID: 0}
+--- !u!114 &7870453715122650052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4291722035117816937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87969e1d98b6b9946a2f0135358e54f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FootstepEmitter
+  surfaceData: {fileID: 11400000, guid: e408a8a0b70c74a41b0364a88255cf55, type: 2}
+  stepDistance: 2
+  footOrigin: {fileID: 7435565209725510831}
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 1048769
+  raycastDistance: 1.5
+--- !u!114 &8439617780837365719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4291722035117816937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d137bfb468647be4daef08b5f85f3836, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerDeathController
+  respawnDelay: 5
+  respawnPosition: {x: 0, y: 0, z: 0}
+  itemDropRadius: 2
+  itemDropUpForce: 2
+  playerManager: {fileID: 7350867502634692673}
 --- !u!1 &4359826508106861558
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,7 +628,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2316368557624000817}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Orientation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -539,7 +659,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1632987904934400222}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -571,7 +691,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1078615359468114011}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Item Hold Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -604,7 +724,7 @@ GameObject:
   - component: {fileID: 6854677833654283251}
   - component: {fileID: 1626820632295783013}
   - component: {fileID: 3969777062274147478}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Eyes Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -691,7 +811,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7392240281951479410}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Mesh Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}

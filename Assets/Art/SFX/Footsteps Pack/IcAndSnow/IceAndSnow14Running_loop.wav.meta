@@ -1,0 +1,29 @@
+fileFormatVersion: 2
+guid: 741c38fc41eb4654c9b262697b7e9587
+AudioImporter:
+  externalObjects: {}
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 0
+    sampleRateSetting: 0
+    sampleRateOverride: 44100
+    compressionFormat: 1
+    quality: 1
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  normalize: 1
+  preloadAudioData: 1
+  loadInBackground: 0
+  ambisonic: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 330509
+  packageName: Footsteps - Pack
+  packageVersion: 1.0
+  assetPath: Assets/cplomedia/Footsteps Pack/IcAndSnow/IceAndSnow14Running_loop.wav
+  uploadId: 782072

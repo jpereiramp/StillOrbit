@@ -1,3 +1,4 @@
+using System.Collections;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -29,6 +30,11 @@ public class HitEffectReceiver : MonoBehaviour
     [SerializeField]
     private float vfxLifetime = 2f;
 
+    [BoxGroup("Visual")]
+    [Tooltip("(Player Only!) Vignette object hit effect")]
+    [SerializeField]
+    private GameObject vignetteHitEffect;
+
     /// <summary>
     /// Plays the hit effects at the specified position.
     /// </summary>
@@ -38,6 +44,7 @@ public class HitEffectReceiver : MonoBehaviour
     {
         PlayHitSound(hitPoint);
         SpawnHitVFX(hitPoint, hitNormal);
+        BlinkDamageVignette();
     }
 
     /// <summary>
@@ -46,6 +53,20 @@ public class HitEffectReceiver : MonoBehaviour
     public void PlayHitEffect()
     {
         PlayHitEffect(transform.position, Vector3.up);
+    }
+
+    private void BlinkDamageVignette()
+    {
+        if (vignetteHitEffect == null) return;
+
+        StartCoroutine(BlinkVignetteCoroutine());
+    }
+
+    private IEnumerator BlinkVignetteCoroutine()
+    {
+        vignetteHitEffect.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+        vignetteHitEffect.SetActive(false);
     }
 
     private void PlayHitSound(Vector3 position)

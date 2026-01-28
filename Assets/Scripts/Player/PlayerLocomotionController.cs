@@ -40,6 +40,10 @@ public class PlayerLocomotionController : MonoBehaviour, ICharacterController
 {
     public KinematicCharacterMotor Motor;
 
+    [Header("Audio")]
+    [Tooltip("Optional footstep emitter for movement sounds.")]
+    [SerializeField] private FootstepEmitter footstepEmitter;
+
     [Header("Stable Movement")]
     public float MaxStableMoveSpeed = 10f;
     public float StableMovementSharpness = 15f;
@@ -441,6 +445,14 @@ public class PlayerLocomotionController : MonoBehaviour, ICharacterController
                     }
                     break;
                 }
+        }
+
+        // Update footstep emitter with current movement state
+        if (footstepEmitter != null)
+        {
+            Vector3 velocity = Motor.BaseVelocity;
+            float horizontalSpeed = new Vector3(velocity.x, 0f, velocity.z).magnitude;
+            footstepEmitter.UpdateMovement(Motor.GroundingStatus.IsStableOnGround, horizontalSpeed);
         }
     }
 

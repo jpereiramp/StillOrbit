@@ -96,13 +96,13 @@ MonoBehaviour:
   aimController: {fileID: 0}
   audioData: {fileID: 0}
   audioSource: {fileID: 0}
-  fireSFX: {fileID: 8300000, guid: 66aa8ad836d59494d81896a7643f7c59, type: 3}
-  emptySFX: {fileID: 8300000, guid: 08749cc1fc16f6a469da6e0aba342994, type: 3}
-  reloadSFX: {fileID: 8300000, guid: 0e59991e6499ed74bbd479752962f587, type: 3}
+  fireSFX: {fileID: 8300000, guid: f47f9840f21d4da43845346e4d6dc3a9, type: 3}
+  emptySFX: {fileID: 8300000, guid: 9a973634c4b77c543bf2fe60243f0eb5, type: 3}
+  reloadSFX: {fileID: 8300000, guid: 986e07a784af4814db8b7781b4d14e81, type: 3}
   sfxVolume: 1
   muzzleFlashPrefab: {fileID: 2565437225881306255, guid: b56099fa12e34344bb4e8bd75d0dba30, type: 3}
   muzzleFlashLifetime: 0.1
-  beamPrefab: {fileID: 7604438112173713759, guid: 125414ff4ba779342adeff8eed778490, type: 3}
+  beamPrefab: {fileID: 0}
   beamDuration: 0.1
   impactVFXPrefab: {fileID: 1370874438154576190, guid: c02083b1627cc40449e4e7c3ed1f2a65, type: 3}
   impactVFXLifetime: 0.15
@@ -123,7 +123,7 @@ MonoBehaviour:
       m_Calls: []
   hitLayers:
     serializedVersion: 2
-    m_Bits: 1082560
+    m_Bits: 1213633
 --- !u!1 &6601171925563091200
 GameObject:
   m_ObjectHideFlags: 0
