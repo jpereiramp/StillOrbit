@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 7b9aa532e8dc43e44921591731c011df
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 189825
+  packageName: Creature Animations
+  packageVersion: 1.3
+  assetPath: Assets\Imports/Polygonmaker/Polygonmaker Animations/Creatures/Scenes/Source/Animators
+    for render/Anim_Creature@turnR90.controller
+  uploadId: 0

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 4163628e5a0ac874687b4a6025eab373
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 189825
+  packageName: Creature Animations
+  packageVersion: 1.3
+  assetPath: Assets\Imports/Polygonmaker/Polygonmaker Animations/Creatures/Scenes/Source/Animators
+    for render/Anim_Creature@deathimpact.controller
+  uploadId: 0

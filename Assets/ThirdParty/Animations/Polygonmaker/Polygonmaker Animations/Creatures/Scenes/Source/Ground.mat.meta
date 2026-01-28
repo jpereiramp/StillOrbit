@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 49c51543958d5de41b98292e9b26f1b3
+timeCreated: 1529600136
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 189825
+  packageName: Creature Animations
+  packageVersion: 1.3
+  assetPath: Assets\Imports/Polygonmaker/Polygonmaker Animations/Creatures/Scenes/Source/Ground.mat
+  uploadId: 0

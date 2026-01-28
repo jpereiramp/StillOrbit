@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 5ca944a9e807c3f48bdbe3eab8cf7412
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 189825
+  packageName: Creature Animations
+  packageVersion: 1.3
+  assetPath: Assets\Imports/Polygonmaker/Polygonmaker Animations/Creatures/Scenes/Source/Animators
+    for render/Anim_Creature@idle.controller
+  uploadId: 0

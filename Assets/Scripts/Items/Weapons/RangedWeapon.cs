@@ -83,7 +83,7 @@ public class RangedWeapon : MonoBehaviour, IUsable, IWeapon
         // Try to find AimController if not assigned
         if (aimController == null)
         {
-            aimController = FindObjectOfType<PlayerAimController>();
+            aimController = FindAnyObjectByType<PlayerAimController>();
         }
     }
 
