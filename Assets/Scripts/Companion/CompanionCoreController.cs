@@ -70,6 +70,10 @@ public class CompanionCoreController : MonoBehaviour
     [ShowInInspector, ReadOnly]
     private CompanionState previousState = CompanionState.Inactive;
 
+    // State Machine
+    private StateMachine<CompanionState, CompanionContext> _stateMachine;
+    private CompanionContext _context;
+
     // Events
     public event Action OnCompanionActivated;
     public event Action OnCompanionDeactivated;
@@ -120,14 +124,121 @@ public class CompanionCoreController : MonoBehaviour
             return;
         }
 
+        // Initialize state machine
+        InitializeStateMachine();
+
         // Start active
         SetActive(true);
+    }
+
+    private void InitializeStateMachine()
+    {
+        // Create context
+        _context = new CompanionContext(
+            this,
+            companionData,
+            transform,
+            navAgent,
+            movementController,
+            inventory,
+            autoDepositController,
+            callHandler
+        );
+        _context.PlayerTransform = targetPlayerTransform;
+
+        // Create state machine
+        _stateMachine = new StateMachine<CompanionState, CompanionContext>(_context);
+
+        // Register states
+        _stateMachine.RegisterState(CompanionState.Inactive, new CompanionInactiveState());
+        _stateMachine.RegisterState(CompanionState.Idle, new CompanionIdleState());
+        _stateMachine.RegisterState(CompanionState.BeingCalled, new CompanionBeingCalledState());
+        _stateMachine.RegisterState(CompanionState.FollowingPlayer, new CompanionFollowingPlayerState());
+        _stateMachine.RegisterState(CompanionState.MovingToDepot, new CompanionMovingToDepotState());
+        _stateMachine.RegisterState(CompanionState.Depositing, new CompanionDepositingState());
+        _stateMachine.RegisterState(CompanionState.ReturningToPlayer, new CompanionReturningToPlayerState());
+
+        // Register valid transitions
+        RegisterStateTransitions();
+
+        // Subscribe to state changes to update our cached state and fire events
+        _stateMachine.OnStateChanged += HandleStateMachineStateChanged;
+
+        // Initialize in Inactive state
+        _stateMachine.Initialize(CompanionState.Inactive);
+    }
+
+    private void RegisterStateTransitions()
+    {
+        // From Inactive
+        _stateMachine.RegisterTransitions(CompanionState.Inactive,
+            CompanionState.BeingCalled,
+            CompanionState.Idle);
+
+        // From Idle
+        _stateMachine.RegisterTransitions(CompanionState.Idle,
+            CompanionState.BeingCalled,
+            CompanionState.FollowingPlayer,
+            CompanionState.MovingToDepot,
+            CompanionState.Inactive);
+
+        // From BeingCalled
+        _stateMachine.RegisterTransitions(CompanionState.BeingCalled,
+            CompanionState.FollowingPlayer,
+            CompanionState.Idle,
+            CompanionState.Inactive);
+
+        // From FollowingPlayer
+        _stateMachine.RegisterTransitions(CompanionState.FollowingPlayer,
+            CompanionState.Idle,
+            CompanionState.MovingToDepot,
+            CompanionState.BeingCalled,
+            CompanionState.Inactive);
+
+        // From MovingToDepot
+        _stateMachine.RegisterTransitions(CompanionState.MovingToDepot,
+            CompanionState.Depositing,
+            CompanionState.BeingCalled,
+            CompanionState.FollowingPlayer,
+            CompanionState.Inactive);
+
+        // From Depositing
+        _stateMachine.RegisterTransitions(CompanionState.Depositing,
+            CompanionState.ReturningToPlayer,
+            CompanionState.FollowingPlayer,
+            CompanionState.BeingCalled,
+            CompanionState.Inactive);
+
+        // From ReturningToPlayer
+        _stateMachine.RegisterTransitions(CompanionState.ReturningToPlayer,
+            CompanionState.FollowingPlayer,
+            CompanionState.Idle,
+            CompanionState.BeingCalled,
+            CompanionState.Inactive);
+    }
+
+    private void HandleStateMachineStateChanged(CompanionState from, CompanionState to)
+    {
+        previousState = from;
+        currentState = to;
+        _context.OnStateEnter();
+
+        OnStateChanged?.Invoke(from, to);
+        Debug.Log($"[CompanionController] State: {from} -> {to}");
     }
 
     private void Update()
     {
         // Handle inputs
         HandleAllInputs();
+
+        // Update state machine
+        _stateMachine?.Update();
+    }
+
+    private void FixedUpdate()
+    {
+        _stateMachine?.FixedUpdate();
     }
 
     private void HandleAllInputs()
@@ -170,8 +281,15 @@ public class CompanionCoreController : MonoBehaviour
             interactionCollider.enabled = true;
         }
 
-        currentState = CompanionState.Idle;
-        OnStateChanged?.Invoke(CompanionState.Inactive, CompanionState.Idle);
+        // Update context
+        if (_context != null)
+        {
+            _context.PlayerTransform = targetPlayerTransform;
+        }
+
+        // Force to Idle state
+        _stateMachine?.ForceState(CompanionState.Idle);
+
         OnCompanionActivated?.Invoke();
 
         Debug.Log("[CompanionController] Companion activated");
@@ -199,10 +317,9 @@ public class CompanionCoreController : MonoBehaviour
             interactionCollider.enabled = false;
         }
 
-        previousState = currentState;
-        currentState = CompanionState.Inactive;
+        // Force to Inactive state
+        _stateMachine?.ForceState(CompanionState.Inactive);
 
-        OnStateChanged?.Invoke(previousState, currentState);
         OnCompanionDeactivated?.Invoke();
 
         Debug.Log("[CompanionController] Companion deactivated");
@@ -230,7 +347,7 @@ public class CompanionCoreController : MonoBehaviour
     {
         if (!isActive) return false;
 
-        // Validate position is on a NavMesh Surfaace
+        // Validate position is on a NavMesh Surface
         if (!NavMesh.SamplePosition(position, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
         {
             Debug.LogWarning($"[CompanionController] Cannot teleport: position not on NavMesh ({position})");
@@ -275,36 +392,20 @@ public class CompanionCoreController : MonoBehaviour
         }
     }
 
-    #region State Machine
+    #region State Machine Public API
+
     /// <summary>
     /// Request a state change. Validates transition and invokes callbacks.
     /// </summary>
     public bool RequestStateChange(CompanionState newState)
     {
-        if (currentState == newState) return true;
-
-        // Validate transition
-        if (!IsValidTransition(currentState, newState))
+        if (_stateMachine == null)
         {
-            Debug.LogWarning($"[CompanionController] Invalid state transition: {currentState} -> {newState}");
+            Debug.LogError("[CompanionController] State machine not initialized");
             return false;
         }
 
-        // Exit current state
-        OnStateExit(currentState);
-
-        // Change state
-        previousState = currentState;
-        currentState = newState;
-
-        // Enter new state
-        OnStateEnter(newState);
-
-        // Fire event
-        OnStateChanged?.Invoke(previousState, currentState);
-        Debug.Log($"[CompanionController] State: {previousState} -> {currentState}");
-
-        return true;
+        return _stateMachine.RequestStateChange(newState);
     }
 
     /// <summary>
@@ -312,128 +413,39 @@ public class CompanionCoreController : MonoBehaviour
     /// </summary>
     public void ForceState(CompanionState newState)
     {
-        if (currentState == newState) return;
-
-        OnStateExit(currentState);
-        previousState = currentState;
-        currentState = newState;
-        OnStateEnter(newState);
-        OnStateChanged?.Invoke(previousState, currentState);
-        Debug.Log($"[CompanionController] State forced: {previousState} -> {currentState}");
-    }
-
-    private bool IsValidTransition(CompanionState from, CompanionState to)
-    {
-        // Define valid transitions
-        switch (from)
+        if (_stateMachine == null)
         {
-            case CompanionState.Inactive:
-                // Can only go to BeingCalled or Idle from inactive
-                return to == CompanionState.BeingCalled || to == CompanionState.Idle;
-
-            case CompanionState.Idle:
-                // From idle, can be called, start following, or go to depot
-                return to == CompanionState.BeingCalled
-                    || to == CompanionState.FollowingPlayer
-                    || to == CompanionState.MovingToDepot
-                    || to == CompanionState.Inactive;
-
-            case CompanionState.BeingCalled:
-                // After being called, go to following
-                return to == CompanionState.FollowingPlayer
-                    || to == CompanionState.Idle
-                    || to == CompanionState.Inactive;
-
-            case CompanionState.FollowingPlayer:
-                // While following, can go idle, move to depot, or be called again
-                return to == CompanionState.Idle
-                    || to == CompanionState.MovingToDepot
-                    || to == CompanionState.BeingCalled
-                    || to == CompanionState.Inactive;
-
-            case CompanionState.MovingToDepot:
-                // Moving to depot leads to depositing, or can be called back
-                return to == CompanionState.Depositing
-                    || to == CompanionState.BeingCalled
-                    || to == CompanionState.FollowingPlayer
-                    || to == CompanionState.Inactive;
-
-            case CompanionState.Depositing:
-                // After depositing, return to player or follow
-                return to == CompanionState.ReturningToPlayer
-                    || to == CompanionState.FollowingPlayer
-                    || to == CompanionState.BeingCalled
-                    || to == CompanionState.Inactive;
-
-            case CompanionState.ReturningToPlayer:
-                // After returning, follow or go idle
-                return to == CompanionState.FollowingPlayer
-                    || to == CompanionState.Idle
-                    || to == CompanionState.BeingCalled
-                    || to == CompanionState.Inactive;
-
-            default:
-                return false;
+            Debug.LogError("[CompanionController] State machine not initialized");
+            return;
         }
+
+        _stateMachine.ForceState(newState);
     }
 
-    private void OnStateEnter(CompanionState state)
+    /// <summary>
+    /// Check if a transition is valid.
+    /// </summary>
+    public bool IsValidTransition(CompanionState from, CompanionState to)
     {
-        switch (state)
-        {
-            case CompanionState.Inactive:
-                movementController.Stop();
-                break;
-
-            case CompanionState.Idle:
-                // Stop movement
-                movementController.Stop();
-                break;
-
-            case CompanionState.BeingCalled:
-                // Will be handled by spawn logic
-                break;
-
-            case CompanionState.FollowingPlayer:
-                movementController.StartFollowingPlayer();
-                break;
-
-            case CompanionState.MovingToDepot:
-                // Will set destination in auto-deposit logic
-                break;
-
-            case CompanionState.Depositing:
-                // Will handle in depositing logic
-                movementController.Stop();
-                break;
-
-            case CompanionState.ReturningToPlayer:
-                if (targetPlayerTransform != null)
-                {
-                    movementController.SetDestination(targetPlayerTransform.position);
-                }
-                break;
-        }
+        return _stateMachine?.IsValidTransition(from, to) ?? false;
     }
 
-    private void OnStateExit(CompanionState state)
+    /// <summary>
+    /// Pause the state machine (useful for cutscenes, menus, etc.)
+    /// </summary>
+    public void PauseStateMachine()
     {
-        // Cleanup when leaving a state
-        switch (state)
-        {
-            case CompanionState.BeingCalled:
-                // Nothing special
-                break;
-
-            case CompanionState.MovingToDepot:
-                // Clear depot target if needed
-                break;
-
-            case CompanionState.Depositing:
-                // Finalize deposit
-                break;
-        }
+        _stateMachine?.Pause();
     }
+
+    /// <summary>
+    /// Resume the state machine.
+    /// </summary>
+    public void ResumeStateMachine()
+    {
+        _stateMachine?.Resume();
+    }
+
     #endregion
 
 #if UNITY_EDITOR
@@ -485,5 +497,17 @@ public class CompanionCoreController : MonoBehaviour
 
     [Button("To MovingToDepot"), BoxGroup("Debug/States")]
     private void DebugToMovingToDepot() => RequestStateChange(CompanionState.MovingToDepot);
+
+    [Button("Pause SM"), BoxGroup("Debug/States")]
+    private void DebugPauseSM() => PauseStateMachine();
+
+    [Button("Resume SM"), BoxGroup("Debug/States")]
+    private void DebugResumeSM() => ResumeStateMachine();
+
+    [ShowInInspector, BoxGroup("Debug/States"), ReadOnly]
+    private bool IsStateMachineInitialized => _stateMachine?.IsInitialized ?? false;
+
+    [ShowInInspector, BoxGroup("Debug/States"), ReadOnly]
+    private bool IsStateMachinePaused => _stateMachine?.IsPaused ?? false;
 #endif
 }
