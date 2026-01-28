@@ -17,6 +17,16 @@ public class RangedWeaponData : WeaponData
     [SerializeField, Range(0f, 45f)] private float spreadAngle = 0f;  // Degrees
     [SerializeField, Min(1)] private int pelletsPerShot = 1;  // For shotguns
 
+    [Header("Impact Physics")]
+    [Tooltip("Force applied to rigidbodies on hit")]
+    [SerializeField, Min(0f)] private float impactForce = 10f;
+    [Tooltip("How the force is applied")]
+    [SerializeField] private ForceMode impactForceMode = ForceMode.Impulse;
+    [Tooltip("Radius for explosion force (0 = direct force only)")]
+    [SerializeField, Min(0f)] private float explosionRadius = 0f;
+    [Tooltip("Upward modifier for explosion force")]
+    [SerializeField, Range(0f, 3f)] private float explosionUpwardModifier = 0.5f;
+
     // Public accessors
     public float FireRate => fireRate;
     public int ClipSize => clipSize;
@@ -26,6 +36,11 @@ public class RangedWeaponData : WeaponData
     public ItemData AmmoType => ammoType;
     public float SpreadAngle => spreadAngle;
     public int PelletsPerShot => pelletsPerShot;
+    public float ImpactForce => impactForce;
+    public ForceMode ImpactForceMode => impactForceMode;
+    public float ExplosionRadius => explosionRadius;
+    public float ExplosionUpwardModifier => explosionUpwardModifier;
+    public bool HasExplosionForce => explosionRadius > 0f;
 
     /// <summary>
     /// Time between shots in seconds.

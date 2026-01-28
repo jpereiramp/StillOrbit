@@ -332,6 +332,9 @@ MonoBehaviour:
   RotateBuildingPressed: 0
   ConfirmBuildPressed: 0
   CancelBuildPressed: 0
+  ToggleInventoryPressed: 0
+  QuickSlotPressed: -1
+  ReloadPressed: 0
   CallCompanionPressed: 0
 --- !u!114 &8240974224381093844
 MonoBehaviour:
@@ -402,6 +405,9 @@ MonoBehaviour:
   aimLayerMask:
     serializedVersion: 2
     m_Bits: 1049793
+  minAimAssistRadius: 0.05
+  maxAimAssistRadius: 0.4
+  maxAimAssistAngle: 6
 --- !u!114 &6437506023504243459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -418,6 +424,7 @@ MonoBehaviour:
   aimController: {fileID: 4527346682214563505}
   equipmentController: {fileID: 5583483807435740413}
   inventory: {fileID: -461703376959736553}
+  quickSlotController: {fileID: 0}
   interactionRange: 3
 --- !u!114 &5583483807435740413
 MonoBehaviour:
@@ -475,7 +482,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombatManager
   playerManager: {fileID: 0}
   meleeAttackTrigger: MeleeAttack
-  fallbackVFXLifetime: 2
 --- !u!114 &743974934871732703
 MonoBehaviour:
   m_ObjectHideFlags: 0

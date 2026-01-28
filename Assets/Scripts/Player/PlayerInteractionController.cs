@@ -38,6 +38,7 @@ public class PlayerInteractionController : MonoBehaviour
     // Edge detection for inputs (prevent held button = repeated actions)
     private bool previousInteractInput;
     private bool previousDropInput;
+    private bool previousReloadInput;
 
     private void Awake()
     {
@@ -72,9 +73,20 @@ public class PlayerInteractionController : MonoBehaviour
             HandleDrop();
         }
 
+        // Reload input - rising edge only
+        bool reloadPressed = inputHandler.ReloadPressed && !previousReloadInput;
+        if (reloadPressed)
+        {
+            HandleReload();
+        }
+
         // Update previous states for edge detection
         previousInteractInput = inputHandler.InteractInput;
         previousDropInput = inputHandler.DropInput;
+        previousReloadInput = inputHandler.ReloadPressed;
+
+        // Reset one-shot inputs
+        inputHandler.ReloadPressed = false;
     }
 
     private void UpdateCurrentTarget()
@@ -271,6 +283,20 @@ public class PlayerInteractionController : MonoBehaviour
             }
 
             Debug.Log($"[Drop] Dropped {droppedItemData.ItemName}");
+        }
+    }
+
+    private void HandleReload()
+    {
+        if (!equipmentController.HasEquippedItem)
+            return;
+
+        // Check if equipped item is a ranged weapon
+        var rangedWeapon = equipmentController.EquippedObject.GetComponent<RangedWeapon>();
+        if (rangedWeapon != null)
+        {
+            Debug.Log("[Reload] Starting reload...");
+            rangedWeapon.StartReload();
         }
     }
 

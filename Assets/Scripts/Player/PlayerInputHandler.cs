@@ -32,6 +32,9 @@ public class PlayerInputHandler : MonoBehaviour
     // Quick Slots
     public int QuickSlotPressed = QuickSlotController.EmptySlotIndex;
 
+    // Combat
+    public bool ReloadPressed = false;
+
     // Companion
     public bool CallCompanionPressed = false;
     #endregion
@@ -92,6 +95,10 @@ public class PlayerInputHandler : MonoBehaviour
         controls.Player.QuickSlot5.performed += context => OnQuickSlotSelect(context, 4);
         controls.Player.QuickSlot5.canceled += context => OnQuickSlotSelect(context, 4);
 
+        // Combat
+        controls.Player.Reload.performed += OnReload;
+        controls.Player.Reload.canceled += OnReload;
+
         // Companion
         controls.Player.CallCompanion.performed += OnCallCompanion;
         controls.Player.CallCompanion.canceled += OnCallCompanion;
@@ -148,6 +155,10 @@ public class PlayerInputHandler : MonoBehaviour
         controls.Player.QuickSlot4.canceled -= context => OnQuickSlotSelect(context, 3);
         controls.Player.QuickSlot5.performed -= context => OnQuickSlotSelect(context, 4);
         controls.Player.QuickSlot5.canceled -= context => OnQuickSlotSelect(context, 4);
+
+        // Combat
+        controls.Player.Reload.performed -= OnReload;
+        controls.Player.Reload.canceled -= OnReload;
 
         // Companion
         controls.Player.CallCompanion.performed -= OnCallCompanion;
@@ -243,6 +254,12 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (context.performed)
             QuickSlotPressed = slotIndex;
+    }
+
+    public void OnReload(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            ReloadPressed = true;
     }
     #endregion
 }

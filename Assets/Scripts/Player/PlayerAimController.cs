@@ -49,6 +49,40 @@ public class PlayerAimController : MonoBehaviour
 
     public AimHitInfo CurrentAimHitInfo => currentAimHitInfo;
 
+    /// <summary>
+    /// Get the aim ray origin and direction from the camera.
+    /// </summary>
+    public void GetAimRay(out Vector3 origin, out Vector3 direction)
+    {
+        Transform cameraTransform = playerCameraController.CameraTransform;
+        if (cameraTransform != null)
+        {
+            origin = cameraTransform.position;
+            direction = cameraTransform.forward;
+        }
+        else
+        {
+            origin = transform.position;
+            direction = transform.forward;
+        }
+    }
+
+    /// <summary>
+    /// Get the aim target point. If nothing is hit, returns a point at max distance.
+    /// </summary>
+    public Vector3 GetAimTargetPoint()
+    {
+        if (currentAimHitInfo.HasHit)
+        {
+            return currentAimHitInfo.HitPoint;
+        }
+        else
+        {
+            GetAimRay(out Vector3 origin, out Vector3 direction);
+            return origin + direction * maxAimDistance;
+        }
+    }
+
     private void Awake()
     {
         if (playerCameraController == null)

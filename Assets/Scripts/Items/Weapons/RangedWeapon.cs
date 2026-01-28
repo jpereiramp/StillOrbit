@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,11 +12,32 @@ public class RangedWeapon : MonoBehaviour, IUsable, IWeapon
     [Header("Fire Point")]
     [SerializeField] private Transform firePoint;  // Where raycast originates
 
+    [Header("Aim Controller")]
+    [SerializeField] private PlayerAimController aimController;  // Reference to player's aim controller
+
     [Header("Audio")]
+    [Tooltip("Optional: Use WeaponAudioData for advanced audio (randomization, pitch variation). If null, uses individual clips below.")]
+    [SerializeField] private WeaponAudioData audioData;
+    [SerializeField] private AudioSource audioSource; // Optional: for pitch variation support
+    [Space]
+    [Tooltip("Used if WeaponAudioData is not assigned")]
     [SerializeField] private AudioClip fireSFX;
     [SerializeField] private AudioClip emptySFX;
     [SerializeField] private AudioClip reloadSFX;
     [SerializeField, Range(0f, 1f)] private float sfxVolume = 1f;
+
+    [Header("Visual Effects")]
+    [Tooltip("Prefab spawned at fire point on each shot (can contain particles, lights, etc.)")]
+    [SerializeField] private GameObject muzzleFlashPrefab;
+    [SerializeField] private float muzzleFlashLifetime = 0.5f;
+
+    [Tooltip("Prefab for beam/tracer effect. Must have a LineRenderer component.")]
+    [SerializeField] private GameObject beamPrefab;
+    [SerializeField] private float beamDuration = 0.1f;
+
+    [Tooltip("Prefab spawned at impact point")]
+    [SerializeField] private GameObject impactVFXPrefab;
+    [SerializeField] private float impactVFXLifetime = 2f;
 
     [Header("Events")]
     [SerializeField] private UnityEvent onFire;
@@ -57,6 +79,20 @@ public class RangedWeapon : MonoBehaviour, IUsable, IWeapon
         {
             firePoint = transform;
         }
+
+        // Try to find AimController if not assigned
+        if (aimController == null)
+        {
+            aimController = FindObjectOfType<PlayerAimController>();
+        }
+    }
+
+    /// <summary>
+    /// Set the aim controller reference (called by equipment system when equipped).
+    /// </summary>
+    public void SetAimController(PlayerAimController controller)
+    {
+        aimController = controller;
     }
 
     private void Update()
@@ -69,29 +105,42 @@ public class RangedWeapon : MonoBehaviour, IUsable, IWeapon
 
     public UseResult Use(GameObject user)
     {
+        Debug.Log($"[RangedWeapon] Use() called. WeaponData: {(weaponData != null ? weaponData.name : "NULL")}");
+
         if (weaponData == null)
+        {
+            Debug.LogError("[RangedWeapon] WeaponData is null!");
             return UseResult.Failed;
+        }
 
         ownerTransform = user.transform;
 
         // Handle reloading
         if (isReloading)
+        {
+            Debug.Log("[RangedWeapon] Cannot fire - currently reloading");
             return UseResult.Failed;
+        }
 
         // Check ammo
         if (weaponData.UseAmmo && currentAmmo <= 0)
         {
-            // Play empty sound
-            PlaySound(emptySFX);
+            Debug.Log("[RangedWeapon] Out of ammo - playing empty click");
+            PlayEmptySound();
             onEmpty?.Invoke();
+            StartReload(); // Auto-reload when empty
             return UseResult.Failed;
         }
 
         // Check cooldown
         if (!CooldownElapsed)
-            return UseResult.Failed;
+        {
+            return UseResult.Failed; // Silent fail for cooldown (expected during rapid fire)
+        }
 
         // Fire!
+        Debug.Log($"[RangedWeapon] Firing! Ammo: {currentAmmo}/{weaponData.ClipSize}");
+        Fire();
 
         return UseResult.Success;
     }
@@ -105,11 +154,15 @@ public class RangedWeapon : MonoBehaviour, IUsable, IWeapon
         {
             currentAmmo--;
             OnAmmoChanged?.Invoke(currentAmmo, weaponData.ClipSize);
+            Debug.Log($"[RangedWeapon] Ammo consumed. Remaining: {currentAmmo}/{weaponData.ClipSize}");
         }
 
         // Fire event and SFX
-        PlaySound(fireSFX);
+        PlayFireSound();
         onFire?.Invoke();
+
+        // Spawn muzzle flash
+        SpawnMuzzleFlash();
 
         // Perform raycast(s)
         for (int i = 0; i < weaponData.PelletsPerShot; i++)
@@ -120,22 +173,52 @@ public class RangedWeapon : MonoBehaviour, IUsable, IWeapon
 
     private void PerformRaycast()
     {
+        if (aimController == null)
+        {
+            Debug.LogError($"[RangedWeapon] AimController is null! Cannot perform raycast.");
+            return;
+        }
+
+        // Get aim direction from PlayerAimController
+        aimController.GetAimRay(out Vector3 aimOrigin, out Vector3 aimDirection);
+
+        // Apply weapon spread to the aim direction
+        Vector3 direction = ApplySpread(aimDirection);
+
+        // Raycast from fire point (visual origin) but use aim direction
         Vector3 origin = firePoint.position;
-        Vector3 direction = GetFireDirection();
+        Vector3 endPoint = origin + direction * weaponData.MaxRange;
+
+        Debug.Log($"[RangedWeapon] PerformRaycast - Origin: {origin}, AimDirection: {aimDirection}, WithSpread: {direction}");
 
         if (Physics.Raycast(origin, direction, out RaycastHit hit, weaponData.MaxRange, hitLayers))
         {
+            endPoint = hit.point;
+            Debug.Log($"[RangedWeapon] Raycast HIT - HitPoint: {hit.point}, HitObject: {hit.collider.name}");
             ProcessHit(hit);
         }
+        else
+        {
+            Debug.Log($"[RangedWeapon] Raycast MISS - Using max range endpoint");
+        }
 
-        // Debug visualization
-        Debug.DrawRay(origin, direction * weaponData.MaxRange, Color.red, 0.1f);
+        // Show beam/tracer if configured
+        if (beamPrefab != null)
+        {
+            ShowBeam(origin, endPoint);
+        }
+
+        // Debug visualization (green for actual ray direction)
+        Debug.DrawRay(origin, direction * weaponData.MaxRange, Color.green, 1f);
+        // Debug line from origin to endpoint (cyan)
+        Debug.DrawLine(origin, endPoint, Color.cyan, 1f);
     }
 
-    private Vector3 GetFireDirection()
+    /// <summary>
+    /// Apply weapon spread to the base aim direction.
+    /// </summary>
+    private Vector3 ApplySpread(Vector3 baseDirection)
     {
-        Vector3 baseDirection = firePoint.forward;
-
         if (weaponData.SpreadAngle <= 0f)
         {
             return baseDirection;
@@ -161,6 +244,10 @@ public class RangedWeapon : MonoBehaviour, IUsable, IWeapon
 
     private void ProcessHit(RaycastHit hit)
     {
+        Vector3 hitPoint = hit.point;
+        Vector3 hitNormal = hit.normal;
+        Vector3 forceDirection = (hitPoint - firePoint.position).normalized;
+
         // Find IDamageable on hit object
         IDamageable damageable = hit.collider.GetComponent<IDamageable>();
         if (damageable == null)
@@ -186,13 +273,130 @@ public class RangedWeapon : MonoBehaviour, IUsable, IWeapon
             NotifyHit();
         }
 
-        // Always try to play hit effects
+        // Apply physics impact force
+        ApplyImpactForce(hit, forceDirection);
+
+        // Always try to play hit effects on target
         var hitEffects = hit.collider.GetComponent<HitEffectReceiver>();
         if (hitEffects == null)
         {
             hitEffects = hit.collider.GetComponentInParent<HitEffectReceiver>();
         }
-        hitEffects?.PlayHitEffect(hit.point, hit.normal);
+
+        if (hitEffects != null)
+        {
+            hitEffects.PlayHitEffect(hitPoint, hitNormal);
+        }
+        else
+        {
+            // Spawn generic impact VFX if target has no HitEffectReceiver
+            SpawnImpactVFX(hitPoint, hitNormal);
+        }
+    }
+
+    private void ApplyImpactForce(RaycastHit hit, Vector3 forceDirection)
+    {
+        if (weaponData.ImpactForce <= 0f) return;
+
+        // Check for explosion force (area effect)
+        if (weaponData.HasExplosionForce)
+        {
+            ApplyExplosionForce(hit.point);
+            return;
+        }
+
+        // Direct force on the hit object
+        Rigidbody hitRigidbody = hit.collider.attachedRigidbody;
+        if (hitRigidbody != null && !hitRigidbody.isKinematic)
+        {
+            // Apply force at the hit point for realistic torque
+            Vector3 force = forceDirection * weaponData.ImpactForce;
+            hitRigidbody.AddForceAtPosition(force, hit.point, weaponData.ImpactForceMode);
+
+            Debug.Log($"[RangedWeapon] Applied impact force {weaponData.ImpactForce} to {hitRigidbody.name}");
+        }
+    }
+
+    private void ApplyExplosionForce(Vector3 explosionCenter)
+    {
+        // Find all colliders in explosion radius
+        Collider[] affectedColliders = Physics.OverlapSphere(
+            explosionCenter,
+            weaponData.ExplosionRadius,
+            hitLayers
+        );
+
+        HashSet<Rigidbody> processedBodies = new HashSet<Rigidbody>();
+
+        foreach (Collider col in affectedColliders)
+        {
+            Rigidbody rb = col.attachedRigidbody;
+            if (rb == null || rb.isKinematic) continue;
+            if (processedBodies.Contains(rb)) continue; // Prevent applying force multiple times
+
+            processedBodies.Add(rb);
+
+            rb.AddExplosionForce(
+                weaponData.ImpactForce,
+                explosionCenter,
+                weaponData.ExplosionRadius,
+                weaponData.ExplosionUpwardModifier,
+                weaponData.ImpactForceMode
+            );
+
+            Debug.Log($"[RangedWeapon] Applied explosion force to {rb.name}");
+        }
+    }
+
+    private void SpawnMuzzleFlash()
+    {
+        if (muzzleFlashPrefab == null) return;
+
+        GameObject muzzleFlash = Instantiate(
+            muzzleFlashPrefab,
+            firePoint.position,
+            firePoint.rotation,
+            firePoint // Parent to fire point so it follows the weapon
+        );
+
+        Destroy(muzzleFlash, muzzleFlashLifetime);
+    }
+
+    private void SpawnImpactVFX(Vector3 position, Vector3 normal)
+    {
+        if (impactVFXPrefab == null) return;
+
+        GameObject impact = Instantiate(impactVFXPrefab, position, Quaternion.LookRotation(normal));
+        Destroy(impact, impactVFXLifetime);
+    }
+
+    private void ShowBeam(Vector3 start, Vector3 end)
+    {
+        if (beamPrefab == null) return;
+
+        Debug.Log($"[RangedWeapon] ShowBeam called - Start: {start}, End: {end}");
+        Debug.Log($"[RangedWeapon] FirePoint position: {firePoint.position}, forward: {firePoint.forward}");
+        Debug.Log($"[RangedWeapon] Direction to end: {(end - start).normalized}");
+
+        // Instantiate at world origin with no rotation to ensure useWorldSpace positions work correctly
+        GameObject beamInstance = Instantiate(beamPrefab, Vector3.zero, Quaternion.identity);
+        LineRenderer lineRenderer = beamInstance.GetComponent<LineRenderer>();
+
+        if (lineRenderer != null)
+        {
+            Debug.Log($"[RangedWeapon] LineRenderer useWorldSpace: {lineRenderer.useWorldSpace}, positionCount: {lineRenderer.positionCount}");
+
+            lineRenderer.SetPosition(0, start);
+            lineRenderer.SetPosition(1, end);
+
+            Debug.Log($"[RangedWeapon] After SetPosition - Pos0: {lineRenderer.GetPosition(0)}, Pos1: {lineRenderer.GetPosition(1)}");
+        }
+        else
+        {
+            Debug.LogWarning("[RangedWeapon] Beam prefab is missing LineRenderer component!");
+        }
+
+        Destroy(beamInstance, beamDuration);
     }
 
     public void NotifyHit()
@@ -221,7 +425,8 @@ public class RangedWeapon : MonoBehaviour, IUsable, IWeapon
         isReloading = true;
         reloadStartTime = Time.time;
 
-        PlaySound(reloadSFX);
+        Debug.Log("[RangedWeapon] Reload started");
+        PlayReloadSound();
         onReloadStart?.Invoke();
         OnReloadStarted?.Invoke();
     }
@@ -231,6 +436,8 @@ public class RangedWeapon : MonoBehaviour, IUsable, IWeapon
         isReloading = false;
         currentAmmo = weaponData.ClipSize;
 
+        Debug.Log($"[RangedWeapon] Reload complete. Ammo: {currentAmmo}/{weaponData.ClipSize}");
+        PlayReloadCompleteSound();
         onReloadComplete?.Invoke();
         OnReloadCompleted?.Invoke();
         OnAmmoChanged?.Invoke(currentAmmo, weaponData.ClipSize);
@@ -244,12 +451,49 @@ public class RangedWeapon : MonoBehaviour, IUsable, IWeapon
         isReloading = false;
     }
 
-    private void PlaySound(AudioClip clip)
+    private void PlayFireSound()
     {
-        if (clip != null)
+        if (audioData != null)
         {
-            AudioSource.PlayClipAtPoint(clip, firePoint.position, sfxVolume);
+            audioData.PlayFireSound(firePoint.position, audioSource);
         }
+        else if (fireSFX != null)
+        {
+            AudioSource.PlayClipAtPoint(fireSFX, firePoint.position, sfxVolume);
+        }
+    }
+
+    private void PlayEmptySound()
+    {
+        if (audioData != null)
+        {
+            audioData.PlayEmptySound(firePoint.position);
+        }
+        else if (emptySFX != null)
+        {
+            AudioSource.PlayClipAtPoint(emptySFX, firePoint.position, sfxVolume);
+        }
+    }
+
+    private void PlayReloadSound()
+    {
+        if (audioData != null)
+        {
+            audioData.PlayReloadStartSound(firePoint.position);
+        }
+        else if (reloadSFX != null)
+        {
+            AudioSource.PlayClipAtPoint(reloadSFX, firePoint.position, sfxVolume);
+        }
+    }
+
+    private void PlayReloadCompleteSound()
+    {
+        if (audioData != null)
+        {
+            audioData.PlayReloadCompleteSound(firePoint.position);
+        }
+        // No fallback for reload complete - single clip covers both in simple mode
     }
 
     private void OnDisable()
