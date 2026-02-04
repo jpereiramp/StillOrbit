@@ -1,6 +1,5 @@
 ﻿<Solution>
   <Project Path="Unity.Timeline.csproj" />
-  <Project Path="Unity.InputSystem.csproj" />
   <Project Path="Unity.RenderPipelines.GPUDriven.Runtime.csproj" />
   <Project Path="Unity.PlasticSCM.Editor.csproj" />
   <Project Path="AstarPathfindingProject.csproj" />
@@ -26,6 +25,7 @@
   <Project Path="Unity.VisualScripting.Flow.Editor.csproj" />
   <Project Path="AstarPathfindingProjectEditor.csproj" />
   <Project Path="Unity.VisualStudio.Editor.csproj" />
+  <Project Path="Unity.InputSystem.csproj" />
   <Project Path="PPv2URPConverters.csproj" />
   <Project Path="AssetInventory.Editor.csproj" />
   <Project Path="Unity.Searcher.Editor.csproj" />
@@ -39,13 +39,13 @@
   <Project Path="Unity.VisualScripting.State.Editor.csproj" />
   <Project Path="Unity.AI.Navigation.Editor.ConversionSystem.csproj" />
   <Project Path="Unity.Burst.CodeGen.csproj" />
-  <Project Path="Unity.Cinemachine.csproj" />
   <Project Path="VHierarchy.csproj" />
+  <Project Path="Unity.Cinemachine.csproj" />
   <Project Path="Unity.Postprocessing.Editor.csproj" />
   <Project Path="Unity.VisualScripting.Flow.csproj" />
   <Project Path="Unity.Splines.Editor.csproj" />
-  <Project Path="Unity.PerformanceTesting.csproj" />
   <Project Path="Boxophobic.PolyverseSkies.Editor.csproj" />
+  <Project Path="Unity.PerformanceTesting.csproj" />
   <Project Path="SingularityGroup.HotReload.Runtime.csproj" />
   <Project Path="Unity.TextMeshPro.csproj" />
   <Project Path="Unity.TextMeshPro.Editor.csproj" />
@@ -78,8 +78,8 @@
   <Project Path="Unity.Mathematics.Editor.csproj" />
   <Project Path="Unity.VisualScripting.SettingsProvider.Editor.csproj" />
   <Project Path="Whinarn.UnityMeshSimplifier.Editor.csproj" />
-  <Project Path="Boxophobic.Utils.Scripts.csproj" />
   <Project Path="Wingman.csproj" />
+  <Project Path="Boxophobic.Utils.Scripts.csproj" />
   <Project Path="Unity.Settings.Editor.csproj" />
   <Project Path="Unity.InputSystem.TestFramework.csproj" />
   <Project Path="Unity.CollabProxy.Editor.csproj" />
